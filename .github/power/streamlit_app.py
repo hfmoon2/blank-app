@@ -26,8 +26,8 @@ def make_case_id(c: dict, idx: int) -> str:
 # Config
 BASE_DIR = Path(__file__).resolve().parent
 DATA_PATH = str(BASE_DIR / "data" / "cases.jsonl")
-TUTORIAL_PATH = str(BASE_DIR / "data" / "tutorial.jsonl")
-OUTPUT_DIR = str(BASE_DIR / "outputs")
+TUTORIAL_PATH = str(BASE_DIR / "data" / "tutorial.json")
+OUTPUT_DIR = "/tmp/outputs"
 os.makedirs(OUTPUT_DIR, exist_ok=True)
 
 
