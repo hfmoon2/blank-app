@@ -6,6 +6,27 @@ import pandas as pd
 import hashlib
 from pathlib import Path
 
+# Password gate
+if "auth_ok" not in st.session_state:
+    st.session_state.auth_ok = False
+
+app_pw = st.secrets.get("APP_PASSWORD")
+
+if not app_pw:
+    st.error("APP_PASSWORD not set. Add it to Streamlit secrets.")
+    st.stop()
+
+if not st.session_state.auth_ok:
+    st.title("Power Annotation")
+    pwd = st.text_input("Password", type="password")
+    if pwd and pwd == app_pw:
+        st.session_state.auth_ok = True
+        st.rerun()
+    elif pwd:
+        st.error("Wrong password.")
+    st.stop()
+
+
 def make_case_id(c: dict, idx: int) -> str:
     # try scenario id + names + relationship
     meta = c.get("meta", {}) if isinstance(c.get("meta"), dict) else {}
