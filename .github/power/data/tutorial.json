@@ -1,19 +1,302 @@
-[
-  {
-    "title": "Example 1 — Child–Parent (ROLE + directives)",
-    "instruction": "Focus on outcome control and compliance over the whole conversation.",
-    "case": {
-      "id": "tutorial_01",
-      "meta": {"relationship_type":"Child-Parent","name1":"Hang","name2":"Alex","role1":"Parent","role2":"Child"},
-      "raw": {"script":[
-        {"speaker":"Hang","text":"..."},
-        {"speaker":"Alex","text":"..."}
-      ]}
+{
+  "steps": [
+    {
+      "id": "welcome",
+      "type": "content",
+      "title": "Task overview",
+      "bullets": [
+        "Unit of annotation: the entire conversation (whole conversation).",
+        "Label the overall power outcome: Who has more power in this interaction? (Winner A / Winner B / Tie)",
+        "Select all Power Source Tags that best explain WHY the winner has power.",
+        "Optionally write 1–2 sentences of evidence/rationale."
+      ],
+      "callout": "Tip: Do not decide based on relationship labels alone (e.g., parent/boss). Use evidence from what happens in the dialogue."
     },
-    "suggested_label": {
-      "winner": "Hang",
-      "power_sources": ["ROLE", "TIME/URGENCY"],
-      "note": "Hang sets the terms and Alex complies/commits; the outcome is controlled by Hang."
+    {
+      "id": "what_is_power",
+      "type": "content",
+      "title": "What counts as \u201cpower\u201d here?",
+      "paragraphs": [
+        "Power is the ability to influence the other person\u2019s actions, decisions, or constraints within this interaction.",
+        "Power is interaction-based: infer it from what people do and how the other responds (compliance, deference, concessions), not from who they are in general."
+      ],
+      "two_column": {
+        "left_title": "Strong evidence \u2705",
+        "left_bullets": [
+          "One person decides what will happen (what/when/how).",
+          "Directives are followed (explicit compliance).",
+          "Permission/approval is required (gatekeeping).",
+          "Resources/opportunities are offered/withheld conditionally.",
+          "Reputation/norm pressure changes the other\u2019s behavior."
+        ],
+        "right_title": "Not enough by itself \u274c",
+        "right_bullets": [
+          "Being louder/meaner.",
+          "Talking more.",
+          "Having a formal role label without it being exercised.",
+          "A single rude sentence without real influence on outcomes."
+        ]
+      }
+    },
+    {
+      "id": "winner_rules",
+      "type": "content",
+      "title": "How to choose the winner (whole conversation)",
+      "paragraphs": [
+        "Choose the winner based on who most consistently controls outcomes across the conversation.",
+        "If both sides influence outcomes equally (or the outcome is unclear), label Tie."
+      ],
+      "checklist_title": "Quick checklist (use multiple signals)",
+      "checklist": [
+        "Who sets the agenda or redirects topics?",
+        "Who gives directives, and are they followed?",
+        "Who grants/denies permission or access?",
+        "Who controls resources/opportunities?",
+        "Who uses expertise/information to dominate decisions?",
+        "Who leverages urgency/time constraints?",
+        "Who invokes norms/reputation, guilt, or coalitions?",
+        "Who threatens punishment or consequences?"
+      ],
+      "tie_guidance": [
+        "Each controls different outcomes and neither dominates overall.",
+        "Mutual concessions balance out.",
+        "The conversation is too ambiguous to infer dominance."
+      ]
+    },
+    {
+      "id": "tags_reference",
+      "type": "tag_reference",
+      "title": "Power Source Tags (definitions, cues, mini-examples)",
+      "groups": [
+        {
+          "group": "Formal / Structural",
+          "tags": [
+            {
+              "tag": "ROLE",
+              "definition": "Power from a formal role or recognized authority (e.g., parent, supervisor).",
+              "cues": [
+                "Direct instructions framed as authority",
+                "Evaluation/judgment from a superior role",
+                "Permission/obligation language: \u201cyou must\u201d, \u201cas your \u2026\u201d"
+              ],
+              "mini_example": "\u201cI\u2019m your supervisor. Submit the report by 5pm.\u201d"
+            },
+            {
+              "tag": "GATEKEEP",
+              "definition": "Power from controlling access/approval to something the other wants (sign-offs, admissions, introductions).",
+              "cues": [
+                "Approval/denial: \u201cI won\u2019t sign unless \u2026\u201d",
+                "Conditional access: \u201cYou can\u2019t do X until \u2026\u201d",
+                "Blocking entry/opportunity"
+              ],
+              "mini_example": "\u201cI can\u2019t approve your request until you complete the form.\u201d"
+            },
+            {
+              "tag": "RESOURCE",
+              "definition": "Power from controlling tangible or intangible resources (money, help, tools, transportation, time).",
+              "cues": [
+                "Bargaining: \u201cIf you do X, I\u2019ll give you Y\u201d",
+                "Withholding help/resources",
+                "Offering rewards for compliance"
+              ],
+              "mini_example": "\u201cIf you clean your room, I\u2019ll pay for the trip.\u201d"
+            }
+          ]
+        },
+        {
+          "group": "Social / Informal",
+          "tags": [
+            {
+              "tag": "STATUS",
+              "definition": "Power from social rank, popularity, admiration, or prestige.",
+              "cues": [
+                "Deference to popularity",
+                "Seeking approval of a high-status person",
+                "Invoking social visibility: \u201ceveryone will see\u2026\u201d"
+              ],
+              "mini_example": "\u201cIf you come with me, people will take us seriously.\u201d"
+            },
+            {
+              "tag": "NORM/REPUTATION",
+              "definition": "Power from moral norms, reputation pressure, or shame/credit.",
+              "cues": [
+                "Shaming: \u201cThat\u2019s inappropriate\u201d",
+                "Reputation threats: \u201cPeople will judge you\u201d",
+                "Appeals to \u2018should/ought\u2019 norms"
+              ],
+              "mini_example": "\u201cA responsible person wouldn\u2019t post that publicly.\u201d"
+            },
+            {
+              "tag": "COALITION",
+              "definition": "Power amplified by allies, group pressure, or backing from others.",
+              "cues": [
+                "Invoking \u2018we\u2019 or third parties: \u201ceveryone agrees\u201d",
+                "Threat of collective disapproval",
+                "Citing authority/others as support"
+              ],
+              "mini_example": "\u201cThe whole team expects you to follow this process.\u201d"
+            }
+          ]
+        },
+        {
+          "group": "Interactional tactics",
+          "tags": [
+            {
+              "tag": "INFO/EXPERTISE",
+              "definition": "Power from knowledge, skill, or informational advantage (expert or informational authority).",
+              "cues": [
+                "Correcting/teaching with confidence",
+                "Technical explanations used to steer decisions",
+                "Claiming insider knowledge"
+              ],
+              "mini_example": "\u201cThat setting is unsafe\u2014turn on 2FA and remove the ID photo now.\u201d"
+            },
+            {
+              "tag": "TIME/URGENCY",
+              "definition": "Power from deadlines, urgency, or controlling the pacing of action.",
+              "cues": [
+                "\u201cNow / immediately / can\u2019t wait\u201d",
+                "Countdowns/deadlines",
+                "Forcing rapid compliance"
+              ],
+              "mini_example": "\u201cDo it right now\u2014we\u2019re out of time.\u201d"
+            },
+            {
+              "tag": "EMOTIONAL LEVERAGE",
+              "definition": "Power via affection, guilt, dependency, or emotional withholding.",
+              "cues": [
+                "Guilt: \u201cAfter all I\u2019ve done\u2026\u201d",
+                "Conditional affection: \u201cIf you cared\u2026\u201d",
+                "Emotional pressure to comply"
+              ],
+              "mini_example": "\u201cIf you loved me, you\u2019d cancel your plans.\u201d"
+            },
+            {
+              "tag": "COERCION",
+              "definition": "Power via threats of punishment or negative consequences (explicit or implicit).",
+              "cues": [
+                "\u201cOr else\u2026\u201d",
+                "Punishment threats: \u201cI\u2019ll take away\u2026\u201d",
+                "Intimidation"
+              ],
+              "mini_example": "\u201cIf you skip again, you\u2019re grounded for a month.\u201d"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "walkthrough_a",
+      "type": "walkthrough",
+      "title": "Walkthrough A",
+      "prompt": "Read the whole conversation. Who has more power overall, and which tags explain it?",
+      "conversation": [
+        { "speaker": "A", "text": "I saw you posted your student ID photo online." },
+        { "speaker": "B", "text": "Oh\u2014yeah. I needed it for a contest. I forgot to remove it." },
+        { "speaker": "A", "text": "That\u2019s not safe. Anyone can copy your info. We\u2019re fixing it today." },
+        { "speaker": "B", "text": "Do we have to do it right now?" },
+        { "speaker": "A", "text": "Yes. After dinner we\u2019ll go through your accounts together. No more delays." },
+        { "speaker": "B", "text": "Okay\u2026 I\u2019ll take it down." }
+      ],
+      "gold": { "winner": "A", "tags": [ "ROLE", "INFO/EXPERTISE", "TIME/URGENCY" ] },
+      "rationale": "The parent sets the agenda and requires action (directive + compliance), supported by safety expertise and urgency."
+    },
+    {
+      "id": "walkthrough_b",
+      "type": "walkthrough",
+      "title": "Walkthrough B",
+      "prompt": "Notice how the outcome changes because of emotional and reputation pressure.",
+      "conversation": [
+        { "speaker": "A", "text": "Can you come to my event tonight?" },
+        { "speaker": "B", "text": "I already promised my roommate I\u2019d help them move." },
+        { "speaker": "A", "text": "After I supported you all semester, you can\u2019t show up once?" },
+        { "speaker": "B", "text": "That\u2019s not fair\u2026" },
+        { "speaker": "A", "text": "People will notice you weren\u2019t there. It\u2019ll look bad for both of us." },
+        { "speaker": "B", "text": "Okay\u2026 I\u2019ll try to come for at least an hour." }
+      ],
+      "gold": { "winner": "A", "tags": [ "EMOTIONAL LEVERAGE", "NORM/REPUTATION" ] },
+      "rationale": "A gains influence via guilt and reputational pressure; B concedes (partial compliance)."
+    },
+    {
+      "id": "practice_1",
+      "type": "practice",
+      "title": "Practice 1 (Workplace)",
+      "prompt": "Pick the overall winner and the best-fitting tags.",
+      "conversation": [
+        { "speaker": "A", "text": "I can\u2019t approve your PTO request yet." },
+        { "speaker": "B", "text": "Why? I submitted it last week." },
+        { "speaker": "A", "text": "Your handoff plan is missing. Send it today, then I\u2019ll sign off." },
+        { "speaker": "B", "text": "Okay. I\u2019ll send the handoff plan this afternoon." }
+      ],
+      "gold": { "winner": "A", "tags": [ "GATEKEEP", "ROLE" ] },
+      "rationale": "Approval is controlled by the superior; the subordinate complies."
+    },
+    {
+      "id": "practice_2",
+      "type": "practice",
+      "title": "Practice 2 (Roommates)",
+      "prompt": "Pick the overall winner and tags.",
+      "conversation": [
+        { "speaker": "A", "text": "Can you drive me to the airport tomorrow?" },
+        { "speaker": "B", "text": "I can, but only if you cover gas and help me clean tonight." },
+        { "speaker": "A", "text": "Fine. I\u2019ll pay for gas and help you clean." }
+      ],
+      "gold": { "winner": "B", "tags": [ "RESOURCE" ] },
+      "rationale": "B controls a resource (transportation) and sets conditions; A accepts."
+    },
+    {
+      "id": "practice_3",
+      "type": "practice",
+      "title": "Practice 3 (Friends)",
+      "prompt": "Pick the winner and tags. Focus on social influence.",
+      "conversation": [
+        { "speaker": "A", "text": "Sit with us at lunch and don\u2019t mention the argument from yesterday." },
+        { "speaker": "B", "text": "Uh\u2026 okay. I don\u2019t want drama." },
+        { "speaker": "A", "text": "People watch what we do. Don\u2019t make it weird." },
+        { "speaker": "B", "text": "Yeah\u2026 I\u2019ll keep it quiet." }
+      ],
+      "gold": { "winner": "A", "tags": [ "STATUS", "NORM/REPUTATION" ] },
+      "rationale": "The peer complies due to status and reputational pressure."
+    },
+    {
+      "id": "practice_4",
+      "type": "practice",
+      "title": "Practice 4 (Neighbors)",
+      "prompt": "Pick the winner and tags.",
+      "conversation": [
+        { "speaker": "A", "text": "Could you stop parking in front of my driveway?" },
+        { "speaker": "B", "text": "It\u2019s a public street." },
+        { "speaker": "A", "text": "The HOA and three neighbors already complained. If it happens again, they\u2019ll report it." },
+        { "speaker": "B", "text": "Alright, I\u2019ll park on the other side." }
+      ],
+      "gold": { "winner": "A", "tags": [ "COALITION", "NORM/REPUTATION" ] },
+      "rationale": "A leverages group backing and enforcement pressure; B changes behavior."
+    },
+    {
+      "id": "practice_5",
+      "type": "practice",
+      "title": "Practice 5 (Colleagues)",
+      "prompt": "Decide whether there is a clear winner or a Tie.",
+      "conversation": [
+        { "speaker": "A", "text": "Let\u2019s present the results first, then methods." },
+        { "speaker": "B", "text": "I\u2019d rather do methods first. Reviewers expect that." },
+        { "speaker": "A", "text": "How about results first for the talk, methods first for the paper?" },
+        { "speaker": "B", "text": "Deal." }
+      ],
+      "gold": { "winner": "Tie", "tags": [] },
+      "rationale": "Mutual compromise; neither side dominates the overall outcome."
+    },
+    {
+      "id": "finish",
+      "type": "content",
+      "title": "You\u2019re ready",
+      "bullets": [
+        "Label the whole conversation, not individual turns.",
+        "Pick a winner only when evidence shows outcome control.",
+        "Use multi-label tags when multiple sources of power apply.",
+        "When in doubt, choose Tie."
+      ],
+      "callout": "Click \u201cProceed to Annotation\u201d to start your real annotation tasks."
     }
-  }
-]
+  ]
+}
