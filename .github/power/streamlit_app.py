@@ -4,6 +4,7 @@ import os
 from datetime import datetime
 import pandas as pd
 import hashlib
+from pathlib import Path
 
 def make_case_id(c: dict, idx: int) -> str:
     # try scenario id + names + relationship
@@ -23,9 +24,12 @@ def make_case_id(c: dict, idx: int) -> str:
 
 
 # Config
-DATA_PATH = "/workspaces/blank-app/.github/power/data/cases.jsonl"
-TUTORIAL_PATH = "/workspaces/blank-app/.github/power/data/tutorial.jsonl"
-OUTPUT_DIR = "outputs"
+BASE_DIR = Path(__file__).resolve().parent
+DATA_PATH = str(BASE_DIR / "data" / "cases.jsonl")
+TUTORIAL_PATH = str(BASE_DIR / "data" / "tutorial.json")
+OUTPUT_DIR = str(BASE_DIR / "outputs")
+os.makedirs(OUTPUT_DIR, exist_ok=True)
+
 
 POWER_SOURCE_TAGS = [
     "ROLE", "RESOURCE", "GATEKEEP", "STATUS", "INFO/EXPERTISE", "TIME/URGENCY",
