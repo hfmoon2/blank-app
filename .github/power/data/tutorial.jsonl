@@ -1,0 +1,19 @@
+[
+  {
+    "title": "Example 1 — Child–Parent (ROLE + directives)",
+    "instruction": "Focus on outcome control and compliance over the whole conversation.",
+    "case": {
+      "id": "tutorial_01",
+      "meta": {"relationship_type":"Child-Parent","name1":"Hang","name2":"Alex","role1":"Parent","role2":"Child"},
+      "raw": {"script":[
+        {"speaker":"Hang","text":"..."},
+        {"speaker":"Alex","text":"..."}
+      ]}
+    },
+    "suggested_label": {
+      "winner": "Hang",
+      "power_sources": ["ROLE", "TIME/URGENCY"],
+      "note": "Hang sets the terms and Alex complies/commits; the outcome is controlled by Hang."
+    }
+  }
+]
