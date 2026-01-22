@@ -288,11 +288,11 @@ st.sidebar.title("🧭 Power Annotation")
 st.sidebar.subheader("Annotator")
 st.session_state.annotator = st.sidebar.selectbox(
     "Choose annotator",
-    options=["Harley", "Annotator2", "Annotator3", "Other..."],
+    options=["Harley", "Stella", "Other..."],
     index=0
 )
 if st.session_state.annotator == "Other...":
-    st.session_state.annotator = st.sidebar.text_input("Type your name", value="Harley")
+    st.session_state.annotator = st.sidebar.text_input("Type your name", value="")
 
 existing = load_existing_annotations(st.session_state.annotator)
 
@@ -301,14 +301,25 @@ st.sidebar.divider()
 # Quick reference (collapsible)
 with st.sidebar.expander("📘 Quick Reference", expanded=False):
     st.markdown("""
-**Winner (Power Holder)**: who has greater effective power over the whole conversation.
-
 **Evidence**:
 - Controls outcomes (what/whether/when/how)
 - Issues directives and gets compliance
 - Gatekeeps access/resources
 - Enforces norms/reputation
 - Leverages expertise/information
+
+**Resource Tags**:
+- ROLE: formal/relational authority (parent, elder, workplace superior).
+- RESOURCE: money, tools, time, transportation, access to services.
+- GATEKEEP: permission, invitations, introductions, approvals.
+- STATUS: popularity, prestige, social standing in a group.
+- INFO/EXPERTISE: evidence or knowledge advantage; technical authority.
+- TIME/URGENCY: deadline pressure enabling commands or immediate compliance.
+- NORM/REPUTATION: shame, public image, "what people will think".
+- EMOTIONAL LEVERAGE: guilt, obligation, fear of abandonment.
+- COERCION: threats, punishment, intimidation.
+- COALITION: third-party support ("everyone agrees"), mobilizing others.                                
+
 """)
 
 st.sidebar.divider()
@@ -507,8 +518,41 @@ else:
 
         winner_key = f"winner_{case_id}"
         winner = st.radio("Winner", options=winner_options, index=winner_options.index(default_winner) if default_winner in winner_options else 0, key=winner_key)
-        tags_key = f"tags_{case_id}"
-        tags = st.multiselect("Power source tags",options=POWER_SOURCE_TAGS,default=[t for t in default_tags if t in POWER_SOURCE_TAGS],key=tags_key)
+        st.markdown("**Power source tags**")
+
+        # --- checkbox grid state key (per case) ---
+        grid_key = f"tags_grid_{case_id}"
+
+        # initialize per-case selected tags once
+        if grid_key not in st.session_state:
+            st.session_state[grid_key] = [
+                t for t in default_tags if t in POWER_SOURCE_TAGS]
+
+        selected = set(st.session_state[grid_key])
+
+        # layout: 2 columns (like your screenshot); you can change to 3/4 if you want
+        n_cols = 2
+        cols = st.columns(n_cols)
+
+        for i, tag in enumerate(POWER_SOURCE_TAGS):
+            col = cols[i % n_cols]
+            cb_key = f"{grid_key}_{tag}"
+
+            # initialize checkbox state once
+            if cb_key not in st.session_state:
+                st.session_state[cb_key] = (tag in selected)
+
+            checked = col.checkbox(tag, key=cb_key)
+
+        # collect after rendering
+        new_selected = []
+        for tag in POWER_SOURCE_TAGS:
+            if st.session_state.get(f"{grid_key}_{tag}", False):
+                new_selected.append(tag)
+
+        tags = new_selected
+        st.session_state[grid_key] = tags
+
 
         if st.button("✅ Save annotation", type="primary"):
             record = {
