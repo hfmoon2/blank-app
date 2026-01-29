@@ -271,6 +271,27 @@ def render_practice(step, all_tags):
         else:
             st.info("Tags do not exactly match (that can be OK). Use the rationale to align your reasoning.")
 
+def render_tag_checkboxes(title: str, tags: list[str], default_selected: list[str], key_prefix: str, n_cols: int = 2):
+    """Return selected tags. Uses per-tag checkbox keys so selections don't leak across cases."""
+    st.markdown(f"**{title}**")
+
+    cols = st.columns(n_cols)
+    selected = []
+
+    default_selected = set(default_selected or [])
+
+    for i, tag in enumerate(tags):
+        k = f"{key_prefix}_{tag}"
+        # initialize checkbox value once per key
+        if k not in st.session_state:
+            st.session_state[k] = (tag in default_selected)
+
+        val = cols[i % n_cols].checkbox(tag, key=k)
+        if val:
+            selected.append(tag)
+
+    return selected
+
 
 if "mode" not in st.session_state:
     st.session_state.mode = "Tutorial"
@@ -293,8 +314,6 @@ st.session_state.annotator = st.sidebar.selectbox(
 )
 if st.session_state.annotator == "Other...":
     st.session_state.annotator = st.sidebar.text_input("Type your name", value="")
-
-existing = load_existing_annotations(st.session_state.annotator)
 
 st.sidebar.divider()
 
@@ -326,8 +345,14 @@ st.sidebar.divider()
 
 # Progress
 cases = load_cases(DATA_PATH)
+case_ids = {c["id"] for c in cases}
+
+existing_all = load_existing_annotations(st.session_state.annotator)  # dict: case_id -> rec
+existing = {cid: rec for cid, rec in existing_all.items() if cid in case_ids}
+
 total = len(cases)
 done = len(existing)
+
 st.sidebar.subheader("Progress")
 st.sidebar.metric("Annotated", done)
 st.sidebar.metric("Total", total)
@@ -508,59 +533,78 @@ else:
         # Pre-fill if already annotated
         prev = existing.get(case_id)
 
+        # winner
         winner_options = ["Tie", name1, name2]
         default_winner = "Tie"
-        default_tags = []
-
         if prev:
             default_winner = prev.get("winner", "Tie")
-            default_tags = prev.get("power_sources", [])
 
         winner_key = f"winner_{case_id}"
-        winner = st.radio("Winner", options=winner_options, index=winner_options.index(default_winner) if default_winner in winner_options else 0, key=winner_key)
-        st.markdown("**Power source tags**")
+        if winner_key not in st.session_state:
+            st.session_state[winner_key] = default_winner if default_winner in winner_options else "Tie"
 
-        # --- checkbox grid state key (per case) ---
-        grid_key = f"tags_grid_{case_id}"
+        winner = st.radio(
+            "Winner",
+            options=winner_options,
+            index=winner_options.index(st.session_state[winner_key]),
+            key=winner_key
+        )
 
-        # initialize per-case selected tags once
-        if grid_key not in st.session_state:
-            st.session_state[grid_key] = [
-                t for t in default_tags if t in POWER_SOURCE_TAGS]
+        st.markdown("### Power source tags (by party)")
 
-        selected = set(st.session_state[grid_key])
+        # --- defaults for A/B ---
+        default_s1 = []
+        default_s2 = []
+        if prev:
+            default_s1 = prev.get("power_sources_s1", [])
+            default_s2 = prev.get("power_sources_s2", [])
 
-        # layout: 2 columns (like your screenshot); you can change to 3/4 if you want
-        n_cols = 2
-        cols = st.columns(n_cols)
+            # backward compat: old data had "power_sources" only
+            if (not default_s1 and not default_s2) and prev.get("power_sources"):
+            # safest: don't guess ownership; keep them empty
+            # if you want, you could show old tags in a separate "overall" section instead
+                pass
 
-        for i, tag in enumerate(POWER_SOURCE_TAGS):
-            col = cols[i % n_cols]
-            cb_key = f"{grid_key}_{tag}"
+        cA, cB = st.columns(2, gap="large")
+        with cA:
+            tags_s1 = render_tag_checkboxes(
+                title=f"{name1}",
+                tags=POWER_SOURCE_TAGS,
+                default_selected=default_s1,
+                key_prefix=f"s1_{case_id}",
+                n_cols=1  # one column inside each party column looks clean
+            )
+        with cB:
+            tags_s2 = render_tag_checkboxes(
+                title=f"{name2}",
+                tags=POWER_SOURCE_TAGS,
+                default_selected=default_s2,
+                key_prefix=f"s2_{case_id}",
+                n_cols=1
+            )
 
-            # initialize checkbox state once
-            if cb_key not in st.session_state:
-                st.session_state[cb_key] = (tag in selected)
-
-            checked = col.checkbox(tag, key=cb_key)
-
-        # collect after rendering
-        new_selected = []
-        for tag in POWER_SOURCE_TAGS:
-            if st.session_state.get(f"{grid_key}_{tag}", False):
-                new_selected.append(tag)
-
-        tags = new_selected
-        st.session_state[grid_key] = tags
-
+        # reason (free form)
+        st.markdown("### Reason")
+        reason_key = f"reason_{case_id}"
+        if reason_key not in st.session_state:
+            st.session_state[reason_key] = (prev.get("reason", "") if prev else "")
+        reason = st.text_area("", key=reason_key, height=120, placeholder="Why did you pick this winner? What evidence in the dialogue supports it?")
 
         if st.button("✅ Save annotation", type="primary"):
             record = {
                 "case_id": case_id,
                 "annotator": st.session_state.annotator,
                 "timestamp": datetime.utcnow().isoformat(),
+
                 "winner": winner,
-                "power_sources": tags,
+
+                # NEW: tags by party
+                "power_sources_s1": tags_s1,
+                "power_sources_s2": tags_s2,
+
+                # NEW: free-form reason
+                "reason": reason,
+
                 "meta_snapshot": {
                     "relationship_type": meta.get("relationship_type"),
                     "role1": meta.get("role1"),
@@ -572,7 +616,6 @@ else:
             upsert_annotation(case_id, st.session_state.annotator, record)
             st.success("Saved!")
             st.rerun()
-
 
         st.divider()
         st.markdown("### Navigation")
