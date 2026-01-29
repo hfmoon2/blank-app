@@ -527,8 +527,26 @@ else:
         script = case.get("raw", {}).get("script", [])
         render_script(script)
 
+        prev = existing.get(case_id)
+
+        st.markdown("### Reason")
+        reason_key = f"reason_{case_id}"
+        if reason_key not in st.session_state:
+            st.session_state[reason_key] = (prev.get("reason", "") if prev else "")
+        reason = st.text_area("", key=reason_key, height=120, placeholder="Why did you pick this winner? What evidence in the dialogue supports it?")
+
+        st.divider()
+        st.markdown("### Navigation")
+        c1, c2 = st.columns(2)
+        with c1:
+            st.button("⬅️ Previous", on_click=go_prev, disabled=(st.session_state.case_idx == 0), key="nav_prev")
+        with c2:
+            st.button("Next ➡️", on_click=go_next, disabled=(st.session_state.case_idx == len(cases)-1), key="nav_next")
+
+
+
     with col_right:
-        st.markdown("### Label this conversation")
+        st.markdown("### Winner")
 
         # Pre-fill if already annotated
         prev = existing.get(case_id)
@@ -544,13 +562,13 @@ else:
             st.session_state[winner_key] = default_winner if default_winner in winner_options else "Tie"
 
         winner = st.radio(
-            "Winner",
+            "",
             options=winner_options,
             index=winner_options.index(st.session_state[winner_key]),
             key=winner_key
         )
 
-        st.markdown("### Power source tags (by party)")
+        st.markdown("### Power source tags")
 
         # --- defaults for A/B ---
         default_s1 = []
@@ -582,15 +600,8 @@ else:
                 key_prefix=f"s2_{case_id}",
                 n_cols=1
             )
-
-        # reason (free form)
-        st.markdown("### Reason")
-        reason_key = f"reason_{case_id}"
-        if reason_key not in st.session_state:
-            st.session_state[reason_key] = (prev.get("reason", "") if prev else "")
-        reason = st.text_area("", key=reason_key, height=120, placeholder="Why did you pick this winner? What evidence in the dialogue supports it?")
-
-        if st.button("✅ Save annotation", type="primary"):
+        
+        if st.button("✅ Save annotation", type="primary", key=f"save_{case_id}"):
             record = {
                 "case_id": case_id,
                 "annotator": st.session_state.annotator,
@@ -616,15 +627,6 @@ else:
             upsert_annotation(case_id, st.session_state.annotator, record)
             st.success("Saved!")
             st.rerun()
-
-        st.divider()
-        st.markdown("### Navigation")
-        c1, c2 = st.columns(2)
-        with c1:
-            st.button("⬅️ Previous", on_click=go_prev, disabled=(st.session_state.case_idx == 0), key="nav_prev")
-        with c2:
-            st.button("Next ➡️", on_click=go_next, disabled=(st.session_state.case_idx == len(cases)-1), key="nav_next")
-
 
 
     # Small footer progress
