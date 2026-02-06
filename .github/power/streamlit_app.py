@@ -59,7 +59,7 @@ POWER_SOURCE_TAGS = [
 
 # Utilities
 @st.cache_data
-def load_cases(path: str):
+def load_cases(path: str, mtime: float):
     cases = []
     with open(path, "r", encoding="utf-8") as f:
         for idx, line in enumerate(f):
@@ -328,27 +328,27 @@ with st.sidebar.expander("📘 Quick Reference", expanded=False):
 - Leverages expertise/information
 
 **Resource Tags**:
-- ROLE: formal/relational authority (parent, elder, workplace superior).
-- RESOURCE: money, tools, time, transportation, access to services.
-- GATEKEEP: permission, invitations, introductions, approvals.
-- STATUS: popularity, prestige, social standing in a group.
-- INFO/EXPERTISE: evidence or knowledge advantage; technical authority.
-- TIME/URGENCY: deadline pressure enabling commands or immediate compliance.
-- NORM/REPUTATION: shame, public image, "what people will think".
-- EMOTIONAL LEVERAGE: guilt, obligation, fear of abandonment.
-- COERCION: threats, punishment, intimidation.
-- COALITION: third-party support ("everyone agrees"), mobilizing others.                                
+- ROLE: Power comes from a recognized role hierarchy that legitimizes directing or evaluating the other.
+- RESOURCE: Power comes from controlling money, goods, access to items, or practical support.
+- GATEKEEP: Power comes from controlling whether the other can access something (an event, opportunity, information, approval, membership, decision channel).
+- STATUS: Power comes from social rank, popularity, reputation, or being admired/feared (even without formal authority).
+- INFO/EXPERTISE: Power comes from having specialized knowledge, credentials, or information the other lacks, which shapes decisions.
+- TIME/URGENCY: Power comes from imposing urgency, deadlines, or controlling when action must happen.
+- NORM/REPUTATION: Power comes from enforcing “what is proper/acceptable,” invoking duty, etiquette, family values, or “how people should behave.”
+- EMOTIONAL LEVERAGE: Power comes from manipulating emotions (guilt, fear of disappointing, affection withdrawal, emotional dependency) to influence the other.
+- COERCION: Power comes from explicit or implicit threats, punishment, or consequences imposed by the speaker.
+- COALITION: Power comes from aligning with others (family, friends, rules, institutions) to increase pressure or legitimacy.                                
 
 """)
 
 st.sidebar.divider()
 
 # Progress
-cases = load_cases(DATA_PATH)
-case_ids = {c["id"] for c in cases}
+cases = load_cases(DATA_PATH, os.path.getmtime(DATA_PATH))
+current_case_ids = {c.get("id", f"idx_{i}") for i, c in enumerate(cases)}
 
-existing_all = load_existing_annotations(st.session_state.annotator)  # dict: case_id -> rec
-existing = {cid: rec for cid, rec in existing_all.items() if cid in case_ids}
+existing_all = load_existing_annotations(st.session_state.annotator)
+existing = {cid: rec for cid, rec in existing_all.items() if cid in current_case_ids}
 
 total = len(cases)
 done = len(existing)
@@ -529,23 +529,6 @@ else:
 
         prev = existing.get(case_id)
 
-        st.markdown("### Reason")
-        reason_key = f"reason_{case_id}"
-        if reason_key not in st.session_state:
-            st.session_state[reason_key] = (prev.get("reason", "") if prev else "")
-        reason = st.text_area("", key=reason_key, height=120, placeholder="Why did you pick this winner? What evidence in the dialogue supports it?")
-
-        st.divider()
-        st.markdown("### Navigation")
-        c1, c2 = st.columns(2)
-        with c1:
-            st.button("⬅️ Previous", on_click=go_prev, disabled=(st.session_state.case_idx == 0), key="nav_prev")
-        with c2:
-            st.button("Next ➡️", on_click=go_next, disabled=(st.session_state.case_idx == len(cases)-1), key="nav_next")
-
-
-
-    with col_right:
         st.markdown("### Winner")
 
         # Pre-fill if already annotated
@@ -567,6 +550,24 @@ else:
             index=winner_options.index(st.session_state[winner_key]),
             key=winner_key
         )
+
+        st.markdown("### Reason")
+        reason_key = f"reason_{case_id}"
+        if reason_key not in st.session_state:
+            st.session_state[reason_key] = (prev.get("reason", "") if prev else "")
+        reason = st.text_area("", key=reason_key, height=120, placeholder="Why did you pick this winner? Be specific about the sources of power.")
+
+        st.divider()
+        st.markdown("### Navigation")
+        c1, c2 = st.columns(2)
+        with c1:
+            st.button("⬅️ Previous", on_click=go_prev, disabled=(st.session_state.case_idx == 0), key="nav_prev")
+        with c2:
+            st.button("Next ➡️", on_click=go_next, disabled=(st.session_state.case_idx == len(cases)-1), key="nav_next")
+
+
+
+    with col_right:
 
         st.markdown("### Power source tags")
 
