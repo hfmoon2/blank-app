@@ -309,27 +309,34 @@ def render_practice(step, all_tags):
         else:
             st.info("Tags do not exactly match (that can be OK). Use the rationale to align your reasoning.")
 
-def render_tag_checkboxes(title: str, tags: list[str], default_selected: list[str], key_prefix: str, n_cols: int = 2):
-    """Return selected tags. Uses per-tag checkbox keys so selections don't leak across cases."""
+def render_tag_checkboxes(title, tags, default_selected, key_prefix, n_cols=1):
     st.markdown(f"**{title}**")
-
-    cols = st.columns(n_cols)
     selected = []
 
-    default_selected = set(default_selected or [])
+    cols = st.columns(n_cols) if n_cols and n_cols > 1 else None
 
-    for i, tag in enumerate(tags):
-        k = f"{key_prefix}_{tag}"
-        # initialize checkbox value once per key
+    for i, t in enumerate(tags):
+        k = f"{key_prefix}_{t}"
         if k not in st.session_state:
-            st.session_state[k] = (tag in default_selected)
+            st.session_state[k] = (t in (default_selected or []))
 
-        val = cols[i % n_cols].checkbox(tag, key=k)
-        if val:
-            selected.append(tag)
+        if cols is None:
+            v = st.checkbox(t, key=k)
+        else:
+            with cols[i % n_cols]:
+                v = st.checkbox(t, key=k)
+
+        if v:
+            selected.append(t)
 
     return selected
 
+def get_selected_tags_from_state(tags, key_prefix):
+    out = []
+    for t in tags:
+        if st.session_state.get(f"{key_prefix}_{t}", False):
+            out.append(t)
+    return out
 
 if "mode" not in st.session_state:
     st.session_state.mode = "Tutorial"
@@ -581,6 +588,7 @@ else:
     winner_reason, tags_reason = "", ""
 
     col_left, col_right = st.columns([2.2, 1], gap="large")
+    prev = existing.get(case_id)
 
     with col_left:
         st.markdown("### Conversation")
@@ -665,65 +673,56 @@ else:
 
         with c2:
             if st.button("✅ Save & Next ➡️", type="primary", key=f"save_next_{case_id}"):
-                do_save() 
-                st.session_state.case_idx = min(st.session_state.case_idx + 1, len(cases) - 1)
-                st.session_state._sync_jump = True
-                st.rerun()
-
-
-    with col_right:
-
-        st.markdown("### Power source tags")
-
-        # defaults
-        default_s1, default_s2 = [], []
-        if prev:
-            default_s1 = prev.get("power_sources_s1", [])
-            default_s2 = prev.get("power_sources_s2", [])
-
-        cA, cB = st.columns(2, gap="large")
-        with cA:
-            tags_s1 = render_tag_checkboxes(
-                title=f"{name1}",
-                tags=POWER_SOURCE_TAGS,
-                default_selected=default_s1,
-                key_prefix=f"s1_{case_id}",
-                n_cols=1
-            )
-        with cB:
-            tags_s2 = render_tag_checkboxes(
-                title=f"{name2}",
-                tags=POWER_SOURCE_TAGS,
-                default_selected=default_s2,
-                key_prefix=f"s2_{case_id}",
-                n_cols=1
-            )
-        
-        if st.button("✅ Save annotation", type="primary", key=f"save_{case_id}"):
-            record = {
+                tags_s1 = get_selected_tags_from_state(POWER_SOURCE_TAGS, key_prefix=f"s1_{case_id}")
+                tags_s2 = get_selected_tags_from_state(POWER_SOURCE_TAGS, key_prefix=f"s2_{case_id}") 
+                record = {
                 "case_id": case_id,
                 "annotator": st.session_state.annotator,
                 "timestamp": datetime.utcnow().isoformat(),
-
                 "winner": winner,
                 "power_sources_s1": tags_s1,
                 "power_sources_s2": tags_s2,
-
-                # NEW: reasons
                 "winner_reason": winner_reason,
                 "tags_reason": tags_reason,
-
                 "meta_snapshot": {
                     "relationship_type": meta.get("relationship_type"),
                     "role1": meta.get("role1"),
                     "role2": meta.get("role2"),
                     "name1": name1,
                     "name2": name2,
+                    }
                 }
-            }
-            upsert_annotation(case_id, st.session_state.annotator, record)
-            st.success("Saved!")
-            st.rerun()
+                upsert_annotation(case_id, st.session_state.annotator, record)
+
+                st.session_state.case_idx = min(st.session_state.case_idx + 1, len(cases) - 1)
+                st.session_state._sync_jump = True
+                st.rerun()
+
+
+
+    with col_right:
+        st.markdown("### Power source tags")
+
+        default_s1 = prev.get("power_sources_s1", []) if prev else []
+        default_s2 = prev.get("power_sources_s2", []) if prev else []
+
+        cA, cB = st.columns(2, gap="large")
+        with cA:
+            _ = render_tag_checkboxes(
+                title=f"{name1}",
+                tags=POWER_SOURCE_TAGS,
+                default_selected=default_s1,
+                key_prefix=f"s1_{case_id}", 
+                n_cols=1
+            )
+        with cB:
+            _ = render_tag_checkboxes(
+                title=f"{name2}",
+                tags=POWER_SOURCE_TAGS,
+                default_selected=default_s2,
+                key_prefix=f"s2_{case_id}",
+                n_cols=1
+            )
 
 
     # Small footer progress
