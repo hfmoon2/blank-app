@@ -129,22 +129,60 @@ def load_existing_annotations(annotator: str):
     rows = res.data or []
     return {r["case_id"]: r["payload"] for r in rows}
 
-def upsert_annotation(case_id: str, annotator: str, record: dict):
+def upsert_annotation(case_id: str, annotator: str, payload: dict):
+    """Insert/update one annotation in Supabase."""
     sb = get_supabase()
     row = {
         "case_id": case_id,
         "annotator": annotator,
-        "payload": record,
+        "payload": payload,
         "updated_at": datetime.utcnow().isoformat(),
     }
-    sb.table("annotations").upsert(row).execute()
+    sb.table("annotations").upsert(row, on_conflict="case_id,annotator").execute()
+
+def do_save():
+    winner_reason = st.session_state.get(f"winner_reason_{case_id}", "")
+    tags_reason = st.session_state.get(f"tags_reason_{case_id}", "")
+    winner = st.session_state.get(f"winner_{case_id}", "Tie")
+
+    record = {
+        "case_id": case_id,
+        "annotator": st.session_state.annotator,
+        "timestamp": datetime.utcnow().isoformat(),
+        "winner": winner,
+        "power_sources_s1": tags_s1,
+        "power_sources_s2": tags_s2,
+        "winner_reason": winner_reason,
+        "tags_reason": tags_reason,
+        "meta_snapshot": {
+            "relationship_type": meta.get("relationship_type"),
+            "role1": meta.get("role1"),
+            "role2": meta.get("role2"),
+            "name1": name1,
+            "name2": name2,
+        }
+    }
+    upsert_annotation(case_id, st.session_state.annotator, record)
+
+def go_next():
+    st.session_state.case_idx = min(st.session_state.case_idx + 1, len(cases) - 1)
+    st.session_state._sync_jump = True
+
+def go_prev():
+    st.session_state.case_idx = max(st.session_state.case_idx - 1, 0)
+    st.session_state._sync_jump = True
+
+def save_and_next():
+    do_save()
+    go_next()
+    st.rerun()
 
 
 def case_option_label(case, existing_dict):
     cid = case.get("id", "unknown")
     rel = (case.get("meta", {}) or {}).get("relationship_type", "Unknown")
     mark = "✅" if cid in existing_dict else "⬜"
-    return f"{mark} {cid})"
+    return f"{mark} {cid} ({rel})"
 
 
 def render_script(script):
@@ -320,6 +358,26 @@ st.sidebar.divider()
 # Quick reference (collapsible)
 with st.sidebar.expander("📘 Quick Reference", expanded=False):
     st.markdown("""
+### Winner (Power Holder) — How to decide
+
+**Core idea:** Power = **influence/control over the outcome** of the **initial conflict**.
+
+**Steps (surface-level, outcome-focused):**
+1) Identify **S1 & S2 intent** → their **initial expected outcome** (what each wants to happen).
+2) Look at the **final outcome** of that **same initial conflict** (not later twists).
+3) Decide winner:
+   - **Whoever compromises loses**
+   - **Whoever’s initial expected outcome changes loses**
+   - **No clear change / not sure → Tie**
+
+**Important constraints:**
+- Focus on **ONE conflict only: the INITIAL one**.
+- If there are twists / multiple requests mid-conversation: **ignore later conflicts** (treat as bad example).
+- **Differentiate control vs threat**:
+  - *Control* = actually steering what happens / what the other accepts.
+  - *Threat* (esp. weak/empty threats) ≠ automatically control unless it changes the outcome.
+
+---
 **Evidence**:
 - Controls outcomes (what/whether/when/how)
 - Issues directives and gets compliance
@@ -335,7 +393,9 @@ with st.sidebar.expander("📘 Quick Reference", expanded=False):
 - INFO/EXPERTISE: Power comes from having specialized knowledge, credentials, or information the other lacks, which shapes decisions.
 - TIME/URGENCY: Power comes from imposing urgency, deadlines, or controlling when action must happen.
 - NORM/REPUTATION: Power comes from enforcing “what is proper/acceptable,” invoking duty, etiquette, family values, or “how people should behave.”
-- EMOTIONAL LEVERAGE: Power comes from manipulating emotions (guilt, fear of disappointing, affection withdrawal, emotional dependency) to influence the other.
+- EMOTIONAL LEVERAGE: Power comes from manipulating emotions (guilt, fear of disappointing, affection withdrawal, emotional dependency) to influence the other. Tag it when a speaker uses **emotionally loaded pressure** to influence the other’s stance/outcome,
+especially via **negative emotional framing** (e.g., guilt/shame/disappointment/fear of letting someone down),
+even if not explicit crying/pleading.
 - COERCION: Power comes from explicit or implicit threats, punishment, or consequences imposed by the speaker.
 - COALITION: Power comes from aligning with others (family, friends, rules, institutions) to increase pressure or legitimacy.                                
 
@@ -369,38 +429,19 @@ st.session_state.mode = st.sidebar.radio(
     index=0 if st.session_state.mode == "Tutorial" else 1
 )
 
-# Jump to case (only in annotate mode)
+# ---- Jump to case (Annotate mode) ----
 if st.session_state.mode == "Annotate":
     st.sidebar.subheader("Jump to Case")
-
     show_only_unannotated = st.sidebar.checkbox("Show only unannotated", value=False)
 
-    def label(i, case):
+    def make_label(i, case):
         cid = case.get("id", f"idx_{i}")
         rel = (case.get("meta", {}) or {}).get("relationship_type", "Unknown")
         mark = "✅" if cid in existing else "⬜"
         return f"{mark} [{i:05d}] {cid} ({rel})"
 
-    full_labels = [label(i, c) for i, c in enumerate(cases)]
-
-    if "jump_case" not in st.session_state:
-        st.session_state.jump_case = full_labels[st.session_state.case_idx]
-
-    def sync_jump_case():
-        st.session_state.jump_case = full_labels[st.session_state.case_idx]
-
-    def on_jump_change():
-        chosen = st.session_state.jump_case
-        st.session_state.case_idx = full_labels.index(chosen)
-
-    def go_next():
-        st.session_state.case_idx = min(st.session_state.case_idx + 1, len(cases) - 1)
-        sync_jump_case()
-
-    def go_prev():
-        st.session_state.case_idx = max(st.session_state.case_idx - 1, 0)
-        sync_jump_case()
-
+    full_labels = [make_label(i, c) for i, c in enumerate(cases)]
+    label_to_idx = {lab: i for i, lab in enumerate(full_labels)}
 
     if show_only_unannotated:
         labels = [lab for i, lab in enumerate(full_labels) if cases[i].get("id") not in existing]
@@ -410,13 +451,29 @@ if st.session_state.mode == "Annotate":
     else:
         labels = full_labels
 
-    st.sidebar.selectbox(
-    "Case",
-    options=labels,
-    key="jump_case",
-    on_change=on_jump_change
+    current_label = full_labels[st.session_state.case_idx]
+    if current_label not in labels:
+        current_label = labels[0]
+
+    if "_sync_jump" not in st.session_state:
+        st.session_state._sync_jump = False
+
+    if "jump_case" not in st.session_state:
+        st.session_state.jump_case = current_label
+    if st.session_state._sync_jump:
+        st.session_state.jump_case = current_label
+        st.session_state._sync_jump = False
+
+    chosen = st.sidebar.selectbox(
+        "Case",
+        options=labels,
+        key="jump_case",
     )
 
+    new_idx = label_to_idx.get(chosen, st.session_state.case_idx)
+    if new_idx != st.session_state.case_idx:
+        st.session_state.case_idx = new_idx
+        st.rerun()
 
 st.sidebar.divider()
 
@@ -520,6 +577,9 @@ else:
     st.markdown("## ✍️ Annotation")
     st.caption(f"Case: {case_id} | Relationship: {meta.get('relationship_type','Unknown')}")
 
+    tags_s1, tags_s2 = [], []
+    winner_reason, tags_reason = "", ""
+
     col_left, col_right = st.columns([2.2, 1], gap="large")
 
     with col_left:
@@ -552,37 +612,74 @@ else:
         )
 
         st.markdown("### Reason")
-        reason_key = f"reason_{case_id}"
-        if reason_key not in st.session_state:
-            st.session_state[reason_key] = (prev.get("reason", "") if prev else "")
-        reason = st.text_area("", key=reason_key, height=120, placeholder="Why did you pick this winner? Be specific about the sources of power.")
+        # ========== Part 1: Winner reason (template) ==========
+        st.markdown("**Winner**")
 
-        st.divider()
-        st.markdown("### Navigation")
+        opt1 = f"{name2} compromised / {name2}'s initial expected outcome changed."
+        opt2 = f"{name1} compromised / {name1}'s initial expected outcome changed."
+        opt3 = "Neither compromised / no clear change in initial expected outcome."
+
+        WINNER_REASON_OPTIONS = [opt1, opt2, opt3]
+        winner_reason_key = f"winner_reason_{case_id}"
+
+        # default
+        if prev and prev.get("winner_reason") in WINNER_REASON_OPTIONS:
+            default_idx = WINNER_REASON_OPTIONS.index(prev["winner_reason"])
+        else:
+            if winner == name1:
+                default_idx = 1  # name2 influenced by name1
+            elif winner == name2:
+                default_idx = 0  # name1 influenced by name2
+            else:
+                default_idx = 2  # tie
+
+        winner_reason = st.radio(
+        label="",
+        options=WINNER_REASON_OPTIONS,
+        index=default_idx,
+        key=winner_reason_key,
+    )
+
+        # ========== Part 2: Tags reason (free-form) ========== 
+        st.markdown("**Power source tags**")
+
+        tags_reason_key = f"tags_reason_{case_id}"
+        default_tags_reason = prev.get("tags_reason", "") if prev else ""
+
+        tags_reason = st.text_area(
+            label="",
+            key=tags_reason_key,
+            value=default_tags_reason if tags_reason_key not in st.session_state else None,
+            height=120,
+            placeholder="Explain why you selected these power source tags (short phrases OK)."
+        )
+
+
+        # Navigation buttons (main script, NOT callbacks)
         c1, c2 = st.columns(2)
         with c1:
-            st.button("⬅️ Previous", on_click=go_prev, disabled=(st.session_state.case_idx == 0), key="nav_prev")
-        with c2:
-            st.button("Next ➡️", on_click=go_next, disabled=(st.session_state.case_idx == len(cases)-1), key="nav_next")
+            if st.button("⬅️ Previous", key=f"nav_prev_{case_id}", disabled=(st.session_state.case_idx == 0)):
+                st.session_state.case_idx = max(st.session_state.case_idx - 1, 0)
+                st.session_state._sync_jump = True
+                st.rerun()
 
+        with c2:
+            if st.button("✅ Save & Next ➡️", type="primary", key=f"save_next_{case_id}"):
+                do_save() 
+                st.session_state.case_idx = min(st.session_state.case_idx + 1, len(cases) - 1)
+                st.session_state._sync_jump = True
+                st.rerun()
 
 
     with col_right:
 
         st.markdown("### Power source tags")
 
-        # --- defaults for A/B ---
-        default_s1 = []
-        default_s2 = []
+        # defaults
+        default_s1, default_s2 = [], []
         if prev:
             default_s1 = prev.get("power_sources_s1", [])
             default_s2 = prev.get("power_sources_s2", [])
-
-            # backward compat: old data had "power_sources" only
-            if (not default_s1 and not default_s2) and prev.get("power_sources"):
-            # safest: don't guess ownership; keep them empty
-            # if you want, you could show old tags in a separate "overall" section instead
-                pass
 
         cA, cB = st.columns(2, gap="large")
         with cA:
@@ -591,7 +688,7 @@ else:
                 tags=POWER_SOURCE_TAGS,
                 default_selected=default_s1,
                 key_prefix=f"s1_{case_id}",
-                n_cols=1  # one column inside each party column looks clean
+                n_cols=1
             )
         with cB:
             tags_s2 = render_tag_checkboxes(
@@ -609,13 +706,12 @@ else:
                 "timestamp": datetime.utcnow().isoformat(),
 
                 "winner": winner,
-
-                # NEW: tags by party
                 "power_sources_s1": tags_s1,
                 "power_sources_s2": tags_s2,
 
-                # NEW: free-form reason
-                "reason": reason,
+                # NEW: reasons
+                "winner_reason": winner_reason,
+                "tags_reason": tags_reason,
 
                 "meta_snapshot": {
                     "relationship_type": meta.get("relationship_type"),
