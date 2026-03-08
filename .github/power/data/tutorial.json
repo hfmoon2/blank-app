@@ -7,7 +7,7 @@
       "bullets": [
         "Unit of annotation: the entire conversation (whole conversation).",
         "Label the overall power outcome: Who has more power in this interaction? (Winner A / Winner B / Tie)",
-        "Select all Power Source Tags that best explain WHY the winner has power.",
+        "Select all Power Source Tags that best explain WHY the winner has power in this conflict.",
         "Optionally write 1–2 sentences of evidence/rationale."
       ],
       "callout": "Tip: Do not decide based on relationship labels alone (e.g., parent/boss). Use evidence from what happens in the dialogue."
@@ -15,21 +15,21 @@
     {
       "id": "what_is_power",
       "type": "content",
-      "title": "What counts as \u201cpower\u201d here?",
+      "title": "What counts as “power” here?",
       "paragraphs": [
-        "Power is the ability to influence the other person\u2019s actions, decisions, or constraints within this interaction.",
+        "Power is the ability to influence the other person’s actions, decisions, or constraints within this interaction.",
         "Power is interaction-based: infer it from what people do and how the other responds (compliance, deference, concessions), not from who they are in general."
       ],
       "two_column": {
-        "left_title": "Strong evidence \u2705",
+        "left_title": "Strong evidence ✅",
         "left_bullets": [
           "One person decides what will happen (what/when/how).",
           "Directives are followed (explicit compliance).",
-          "Permission/approval is required (gatekeeping).",
-          "Resources/opportunities are offered/withheld conditionally.",
-          "Reputation/norm pressure changes the other\u2019s behavior."
+          "Resources, support, approval, opportunities, or access are offered/withheld conditionally.",
+          "Superior knowledge/information shapes the other person’s decision.",
+          "Norm/reputation pressure changes the other person’s behavior."
         ],
-        "right_title": "Not enough by itself \u274c",
+        "right_title": "Not enough by itself ❌",
         "right_bullets": [
           "Being louder/meaner.",
           "Talking more.",
@@ -41,19 +41,18 @@
     {
       "id": "winner_rules",
       "type": "content",
-      "title": "How to choose the winner (whole conversation)",
+      "title": "How to choose the winner (initial conflict)",
       "paragraphs": [
-        "Choose the winner based on who most consistently controls outcomes across the conversation.",
-        "If both sides influence outcomes equally (or the outcome is unclear), label Tie."
+        "Choose the winner based on who most clearly controls the outcome of the initial conflict.",
+        "Whoever compromises or changes their initial expected outcome loses. If the outcome is balanced or unclear, label Tie."
       ],
       "checklist_title": "Quick checklist (use multiple signals)",
       "checklist": [
-        "Who sets the agenda or redirects topics?",
+        "Who controls what / whether / when / how something happens?",
         "Who gives directives, and are they followed?",
-        "Who grants/denies permission or access?",
-        "Who controls resources/opportunities?",
-        "Who uses expertise/information to dominate decisions?",
-        "Who leverages urgency/time constraints?",
+        "Who controls resources, support, approval, opportunities, or access?",
+        "Who uses expertise/information to shape decisions?",
+        "Who leverages urgency/time constraints to reduce the other’s options?",
         "Who invokes norms/reputation, guilt, or coalitions?",
         "Who threatens punishment or consequences?"
       ],
@@ -73,33 +72,26 @@
           "tags": [
             {
               "tag": "ROLE",
-              "definition": "Power from a formal role or recognized authority (e.g., parent, supervisor).",
-              "cues": [
-                "Direct instructions framed as authority",
-                "Evaluation/judgment from a superior role",
-                "Permission/obligation language: \u201cyou must\u201d, \u201cas your \u2026\u201d"
+              "definition": "Power comes from a recognized role hierarchy or socially recognized position that legitimizes directing, evaluating, or overruling the other person.",
+              "Use when": [
+                "A speaker invokes being a parent, boss, teacher, senior coworker, elder, supervisor, etc.",
+                "The role itself gives them standing to direct or judge the other person."
               ],
-              "mini_example": "\u201cI\u2019m your supervisor. Submit the report by 5pm.\u201d"
+              "Do not use when": "The speaker has no clear role-based authority and is relying mainly on popularity, admiration, or social prestige instead.",
+              "mini_example": "I’m your supervisor. Submit the report by 5pm."
             },
             {
-              "tag": "GATEKEEP",
-              "definition": "Power from controlling access/approval to something the other wants (sign-offs, admissions, introductions).",
-              "cues": [
-                "Approval/denial: \u201cI won\u2019t sign unless \u2026\u201d",
-                "Conditional access: \u201cYou can\u2019t do X until \u2026\u201d",
-                "Blocking entry/opportunity"
+              "tag": "RESOURCE/ACCESS",
+              "definition": "Power comes from controlling resources, practical support, access, approval, opportunities, participation, or channels the other person needs or depends on.",
+              "Use when": [
+                "A speaker controls money, goods, rides, housing, help, tools, or practical support.",
+                "A speaker controls approval, entry, participation, membership, decision channels, or access to an opportunity."
               ],
-              "mini_example": "\u201cI can\u2019t approve your request until you complete the form.\u201d"
-            },
-            {
-              "tag": "RESOURCE",
-              "definition": "Power from controlling tangible or intangible resources (money, help, tools, transportation, time).",
-              "cues": [
-                "Bargaining: \u201cIf you do X, I\u2019ll give you Y\u201d",
-                "Withholding help/resources",
-                "Offering rewards for compliance"
+              "Do not use when": [
+                "The speaker is mainly relying on role legitimacy, not actual control over something the other person needs.",
+                "The speaker is only pressuring through time or emotion, without controlling any meaningful resource/access."
               ],
-              "mini_example": "\u201cIf you clean your room, I\u2019ll pay for the trip.\u201d"
+              "mini_example": "I can’t approve your request until you complete the form."
             }
           ]
         },
@@ -108,82 +100,108 @@
           "tags": [
             {
               "tag": "STATUS",
-              "definition": "Power from social rank, popularity, admiration, or prestige.",
-              "cues": [
-                "Deference to popularity",
-                "Seeking approval of a high-status person",
-                "Invoking social visibility: \u201ceveryone will see\u2026\u201d"
+              "definition": "Power comes from social rank, popularity, admiration, fear, or prestige, even without formal authority.",
+              "Use when": [
+                "A speaker has informal social standing that gives them leverage.",
+                "Others’ admiration, deference, or fear strengthens that speaker’s position."
               ],
-              "mini_example": "\u201cIf you come with me, people will take us seriously.\u201d"
+              "Do not use when": "The power mainly comes from a formal role hierarchy (ROLE) or from invoking what people should do (NORM/REPUTATION).",
+              "mini_example": "If you come with me, people will take us seriously."
             },
             {
               "tag": "NORM/REPUTATION",
-              "definition": "Power from moral norms, reputation pressure, or shame/credit.",
-              "cues": [
-                "Shaming: \u201cThat\u2019s inappropriate\u201d",
-                "Reputation threats: \u201cPeople will judge you\u201d",
-                "Appeals to \u2018should/ought\u2019 norms"
+              "definition": "Power comes from invoking what is proper, acceptable, respectful, shameful, or expected — including etiquette, duty, family values, or concern about how others will judge the situation.",
+              "Use when": [
+                "A speaker enforces norms, morality, duty, propriety, or social expectations.",
+                "A speaker pressures the other person through what people should do or what people will think."
               ],
-              "mini_example": "\u201cA responsible person wouldn\u2019t post that publicly.\u201d"
+              "Do not use when": "The speaker’s leverage comes mainly from their own prestige/popularity (STATUS) or from a concrete threat (COERCION).",
+              "mini_example": "A responsible person wouldn’t post that publicly."
             },
             {
               "tag": "COALITION",
-              "definition": "Power amplified by allies, group pressure, or backing from others.",
-              "cues": [
-                "Invoking \u2018we\u2019 or third parties: \u201ceveryone agrees\u201d",
-                "Threat of collective disapproval",
-                "Citing authority/others as support"
+              "definition": "Power comes from aligning with other people or invoking collective backing to increase pressure, legitimacy, or force.",
+              "Use when": [
+                "A speaker aligns with family, friends, teammates, coworkers, or a broader we.",
+                "A speaker draws strength from third-party backing or group pressure."
               ],
-              "mini_example": "\u201cThe whole team expects you to follow this process.\u201d"
+              "Do not use when": "The speaker is only invoking general norms or propriety without actual group alignment.",
+              "mini_example": "The whole team expects you to follow this process."
             }
           ]
         },
         {
-          "group": "Interactional tactics",
+          "group": "Interactional / Situational",
           "tags": [
             {
               "tag": "INFO/EXPERTISE",
-              "definition": "Power from knowledge, skill, or informational advantage (expert or informational authority).",
-              "cues": [
-                "Correcting/teaching with confidence",
-                "Technical explanations used to steer decisions",
-                "Claiming insider knowledge"
+              "definition": "Power comes from having relevant expertise, credentials, know-how, or privileged information the other person lacks, which shapes decisions, interpretations, or actions.",
+              "Use when": [
+                "A speaker knows how to do something and the other depends on that knowledge.",
+                "A speaker has credentials or specialized knowledge.",
+                "A speaker has important information the other person does not have."
               ],
-              "mini_example": "\u201cThat setting is unsafe\u2014turn on 2FA and remove the ID photo now.\u201d"
+              "Do not use when": "The speaker is only expressing personal feelings or opinions without any real knowledge advantage.",
+              "mini_example": "That setting is unsafe—turn on 2FA and remove the ID photo now."
             },
             {
               "tag": "TIME/URGENCY",
-              "definition": "Power from deadlines, urgency, or controlling the pacing of action.",
-              "cues": [
-                "\u201cNow / immediately / can\u2019t wait\u201d",
-                "Countdowns/deadlines",
-                "Forcing rapid compliance"
+              "definition": "Power comes from imposing urgency, deadlines, or controlling when action must happen in a way that constrains the other person’s options.",
+              "Use when": [
+                "Timing itself creates leverage.",
+                "A speaker uses deadlines or urgency to force quicker compliance or reduce the other person’s room to resist."
               ],
-              "mini_example": "\u201cDo it right now\u2014we\u2019re out of time.\u201d"
+              "Do not use when": "Time is mentioned casually, but does not actually shape the other person’s options.",
+              "mini_example": "Do it right now—we’re out of time."
             },
             {
               "tag": "EMOTIONAL LEVERAGE",
-              "definition": "Power via affection, guilt, dependency, or emotional withholding.",
-              "cues": [
-                "Guilt: \u201cAfter all I\u2019ve done\u2026\u201d",
-                "Conditional affection: \u201cIf you cared\u2026\u201d",
-                "Emotional pressure to comply"
+              "definition": "Power comes from using guilt, disappointment, emotional dependency, affection withdrawal, or fear of letting someone down as pressure to influence the other person’s stance, decision, or behavior.",
+              "Use when": [
+                "A speaker uses emotionally loaded pressure to influence the outcome.",
+                "The emotion is not just expressed; it is used as leverage."
               ],
-              "mini_example": "\u201cIf you loved me, you\u2019d cancel your plans.\u201d"
+              "Do not use when": "A speaker is merely upset, venting, or expressing hurt feelings without using them to pressure the other person.",
+              "mini_example": "If you loved me, you’d cancel your plans."
             },
             {
               "tag": "COERCION",
-              "definition": "Power via threats of punishment or negative consequences (explicit or implicit).",
-              "cues": [
-                "\u201cOr else\u2026\u201d",
-                "Punishment threats: \u201cI\u2019ll take away\u2026\u201d",
-                "Intimidation"
+              "definition": "Power comes from explicit or implicit threats, punishment, or consequences imposed by the speaker.",
+              "Use when": [
+                "A speaker threatens to punish, withdraw something, retaliate, or impose a clear negative consequence.",
+                "Compliance is pushed through fear of what the speaker will do."
               ],
-              "mini_example": "\u201cIf you skip again, you\u2019re grounded for a month.\u201d"
+              "Do not use when": "The speaker is only making the other person feel bad emotionally, without threatening a concrete consequence.",
+              "mini_example": "If you skip again, you’re grounded for a month."
             }
           ]
         }
       ]
+    },
+    {
+      "id": "common_confusions",
+      "type": "content",
+      "title": "Common Confusions",
+      "paragraphs": [
+        "Overlap is normal. Multi-label is allowed when more than one power source is clearly supported by the text.",
+        "Do not tag every possible cue. Choose tags only when the source of leverage is clearly doing work in this conflict."
+      ],
+      "two_column": {
+        "left_title": "Use this distinction ✅",
+        "left_bullets": [
+          "ROLE vs STATUS: ROLE = recognized authority/position; STATUS = informal prestige/popularity.",
+          "RESOURCE/ACCESS vs ROLE: RESOURCE/ACCESS = control over something the other needs; ROLE = authority from position.",
+          "INFO/EXPERTISE: includes both know-how/credentials and important information the other person lacks.",
+          "EMOTIONAL LEVERAGE: emotion used as pressure, not just emotion being expressed."
+        ],
+        "right_title": "Watch out for these mistakes ⚠️",
+        "right_bullets": [
+          "Do not select STATUS just because the speaker is respected if the leverage comes mainly from a formal role.",
+          "Do not select NORM/REPUTATION just because someone sounds judgmental unless they invoke what people should do or how others will judge.",
+          "Do not select EMOTIONAL LEVERAGE for ordinary hurt feelings unless guilt/disappointment/dependency is used to pressure the other person.",
+          "Do not select TIME/URGENCY just because time is mentioned casually; urgency must constrain the other person’s options."
+        ]
+      }
     },
     {
       "id": "walkthrough_a",
@@ -191,15 +209,40 @@
       "title": "Walkthrough A",
       "prompt": "Read the whole conversation. Who has more power overall, and which tags explain it?",
       "conversation": [
-        { "speaker": "A", "text": "I saw you posted your student ID photo online." },
-        { "speaker": "B", "text": "Oh\u2014yeah. I needed it for a contest. I forgot to remove it." },
-        { "speaker": "A", "text": "That\u2019s not safe. Anyone can copy your info. We\u2019re fixing it today." },
-        { "speaker": "B", "text": "Do we have to do it right now?" },
-        { "speaker": "A", "text": "Yes. After dinner we\u2019ll go through your accounts together. No more delays." },
-        { "speaker": "B", "text": "Okay\u2026 I\u2019ll take it down." }
+        {
+          "speaker": "A",
+          "text": "I saw you posted your student ID photo online."
+        },
+        {
+          "speaker": "B",
+          "text": "Oh—yeah. I needed it for a contest. I forgot to remove it."
+        },
+        {
+          "speaker": "A",
+          "text": "That’s not safe. Anyone can copy your info. We’re fixing it today."
+        },
+        {
+          "speaker": "B",
+          "text": "Do we have to do it right now?"
+        },
+        {
+          "speaker": "A",
+          "text": "Yes. After dinner we’ll go through your accounts together. No more delays."
+        },
+        {
+          "speaker": "B",
+          "text": "Okay… I’ll take it down."
+        }
       ],
-      "gold": { "winner": "A", "tags": [ "ROLE", "INFO/EXPERTISE", "TIME/URGENCY" ] },
-      "rationale": "The parent sets the agenda and requires action (directive + compliance), supported by safety expertise and urgency."
+      "gold": {
+        "winner": "A",
+        "tags": [
+          "ROLE",
+          "INFO/EXPERTISE",
+          "TIME/URGENCY"
+        ]
+      },
+      "rationale": "A sets the agenda and requires action (directive + compliance), supported by role authority, safety expertise, and urgency."
     },
     {
       "id": "walkthrough_b",
@@ -207,14 +250,38 @@
       "title": "Walkthrough B",
       "prompt": "Notice how the outcome changes because of emotional and reputation pressure.",
       "conversation": [
-        { "speaker": "A", "text": "Can you come to my event tonight?" },
-        { "speaker": "B", "text": "I already promised my roommate I\u2019d help them move." },
-        { "speaker": "A", "text": "After I supported you all semester, you can\u2019t show up once?" },
-        { "speaker": "B", "text": "That\u2019s not fair\u2026" },
-        { "speaker": "A", "text": "People will notice you weren\u2019t there. It\u2019ll look bad for both of us." },
-        { "speaker": "B", "text": "Okay\u2026 I\u2019ll try to come for at least an hour." }
+        {
+          "speaker": "A",
+          "text": "Can you come to my event tonight?"
+        },
+        {
+          "speaker": "B",
+          "text": "I already promised my roommate I’d help them move."
+        },
+        {
+          "speaker": "A",
+          "text": "After I supported you all semester, you can’t show up once?"
+        },
+        {
+          "speaker": "B",
+          "text": "That’s not fair…"
+        },
+        {
+          "speaker": "A",
+          "text": "People will notice you weren’t there. It’ll look bad for both of us."
+        },
+        {
+          "speaker": "B",
+          "text": "Okay… I’ll try to come for at least an hour."
+        }
       ],
-      "gold": { "winner": "A", "tags": [ "EMOTIONAL LEVERAGE", "NORM/REPUTATION" ] },
+      "gold": {
+        "winner": "A",
+        "tags": [
+          "EMOTIONAL LEVERAGE",
+          "NORM/REPUTATION"
+        ]
+      },
       "rationale": "A gains influence via guilt and reputational pressure; B concedes (partial compliance)."
     },
     {
@@ -223,13 +290,31 @@
       "title": "Practice 1 (Workplace)",
       "prompt": "Pick the overall winner and the best-fitting tags.",
       "conversation": [
-        { "speaker": "A", "text": "I can\u2019t approve your PTO request yet." },
-        { "speaker": "B", "text": "Why? I submitted it last week." },
-        { "speaker": "A", "text": "Your handoff plan is missing. Send it today, then I\u2019ll sign off." },
-        { "speaker": "B", "text": "Okay. I\u2019ll send the handoff plan this afternoon." }
+        {
+          "speaker": "A",
+          "text": "I can’t approve your PTO request yet."
+        },
+        {
+          "speaker": "B",
+          "text": "Why? I submitted it last week."
+        },
+        {
+          "speaker": "A",
+          "text": "Your handoff plan is missing. Send it today, then I’ll sign off."
+        },
+        {
+          "speaker": "B",
+          "text": "Okay. I’ll send the handoff plan this afternoon."
+        }
       ],
-      "gold": { "winner": "A", "tags": [ "GATEKEEP", "ROLE" ] },
-      "rationale": "Approval is controlled by the superior; the subordinate complies."
+      "gold": {
+        "winner": "A",
+        "tags": [
+          "ROLE",
+          "RESOURCE/ACCESS"
+        ]
+      },
+      "rationale": "A controls approval and uses their formal workplace position to condition the outcome; B complies."
     },
     {
       "id": "practice_2",
@@ -237,12 +322,26 @@
       "title": "Practice 2 (Roommates)",
       "prompt": "Pick the overall winner and tags.",
       "conversation": [
-        { "speaker": "A", "text": "Can you drive me to the airport tomorrow?" },
-        { "speaker": "B", "text": "I can, but only if you cover gas and help me clean tonight." },
-        { "speaker": "A", "text": "Fine. I\u2019ll pay for gas and help you clean." }
+        {
+          "speaker": "A",
+          "text": "Can you drive me to the airport tomorrow?"
+        },
+        {
+          "speaker": "B",
+          "text": "I can, but only if you cover gas and help me clean tonight."
+        },
+        {
+          "speaker": "A",
+          "text": "Fine. I’ll pay for gas and help you clean."
+        }
       ],
-      "gold": { "winner": "B", "tags": [ "RESOURCE" ] },
-      "rationale": "B controls a resource (transportation) and sets conditions; A accepts."
+      "gold": {
+        "winner": "B",
+        "tags": [
+          "RESOURCE/ACCESS"
+        ]
+      },
+      "rationale": "B controls a practical resource (transportation) and sets conditions; A accepts."
     },
     {
       "id": "practice_3",
@@ -250,13 +349,31 @@
       "title": "Practice 3 (Friends)",
       "prompt": "Pick the winner and tags. Focus on social influence.",
       "conversation": [
-        { "speaker": "A", "text": "Sit with us at lunch and don\u2019t mention the argument from yesterday." },
-        { "speaker": "B", "text": "Uh\u2026 okay. I don\u2019t want drama." },
-        { "speaker": "A", "text": "People watch what we do. Don\u2019t make it weird." },
-        { "speaker": "B", "text": "Yeah\u2026 I\u2019ll keep it quiet." }
+        {
+          "speaker": "A",
+          "text": "Sit with us at lunch and don’t mention the argument from yesterday."
+        },
+        {
+          "speaker": "B",
+          "text": "Uh… okay. I don’t want drama."
+        },
+        {
+          "speaker": "A",
+          "text": "People watch what we do. Don’t make it weird."
+        },
+        {
+          "speaker": "B",
+          "text": "Yeah… I’ll keep it quiet."
+        }
       ],
-      "gold": { "winner": "A", "tags": [ "STATUS", "NORM/REPUTATION" ] },
-      "rationale": "The peer complies due to status and reputational pressure."
+      "gold": {
+        "winner": "A",
+        "tags": [
+          "STATUS",
+          "NORM/REPUTATION"
+        ]
+      },
+      "rationale": "The peer complies due to social-status pressure and reputational concern."
     },
     {
       "id": "practice_4",
@@ -264,13 +381,31 @@
       "title": "Practice 4 (Neighbors)",
       "prompt": "Pick the winner and tags.",
       "conversation": [
-        { "speaker": "A", "text": "Could you stop parking in front of my driveway?" },
-        { "speaker": "B", "text": "It\u2019s a public street." },
-        { "speaker": "A", "text": "The HOA and three neighbors already complained. If it happens again, they\u2019ll report it." },
-        { "speaker": "B", "text": "Alright, I\u2019ll park on the other side." }
+        {
+          "speaker": "A",
+          "text": "Could you stop parking in front of my driveway?"
+        },
+        {
+          "speaker": "B",
+          "text": "It’s a public street."
+        },
+        {
+          "speaker": "A",
+          "text": "The HOA and three neighbors already complained. If it happens again, they’ll report it."
+        },
+        {
+          "speaker": "B",
+          "text": "Alright, I’ll park on the other side."
+        }
       ],
-      "gold": { "winner": "A", "tags": [ "COALITION", "NORM/REPUTATION" ] },
-      "rationale": "A leverages group backing and enforcement pressure; B changes behavior."
+      "gold": {
+        "winner": "A",
+        "tags": [
+          "COALITION",
+          "NORM/REPUTATION"
+        ]
+      },
+      "rationale": "A leverages backing from others plus reputational/enforcement pressure; B changes behavior."
     },
     {
       "id": "practice_5",
@@ -278,25 +413,40 @@
       "title": "Practice 5 (Colleagues)",
       "prompt": "Decide whether there is a clear winner or a Tie.",
       "conversation": [
-        { "speaker": "A", "text": "Let\u2019s present the results first, then methods." },
-        { "speaker": "B", "text": "I\u2019d rather do methods first. Reviewers expect that." },
-        { "speaker": "A", "text": "How about results first for the talk, methods first for the paper?" },
-        { "speaker": "B", "text": "Deal." }
+        {
+          "speaker": "A",
+          "text": "Let’s present the results first, then methods."
+        },
+        {
+          "speaker": "B",
+          "text": "I’d rather do methods first. Reviewers expect that."
+        },
+        {
+          "speaker": "A",
+          "text": "How about results first for the talk, methods first for the paper?"
+        },
+        {
+          "speaker": "B",
+          "text": "Deal."
+        }
       ],
-      "gold": { "winner": "Tie", "tags": [] },
-      "rationale": "Mutual compromise; neither side dominates the overall outcome."
+      "gold": {
+        "winner": "Tie",
+        "tags": []
+      },
+      "rationale": "Mutual compromise; neither side controls the overall outcome."
     },
     {
       "id": "finish",
       "type": "content",
-      "title": "You\u2019re ready",
+      "title": "You’re ready",
       "bullets": [
         "Label the whole conversation, not individual turns.",
-        "Pick a winner only when evidence shows outcome control.",
-        "Use multi-label tags when multiple sources of power apply.",
-        "When in doubt, choose Tie."
+        "Pick a winner only when evidence shows outcome control in the initial conflict.",
+        "Use multi-label tags when multiple power sources clearly apply.",
+        "When in doubt, choose Tie and avoid over-tagging."
       ],
-      "callout": "Click \u201cProceed to Annotation\u201d to start your real annotation tasks."
+      "callout": "Click “Proceed to Annotation” to start your real annotation tasks."
     }
   ]
 }
