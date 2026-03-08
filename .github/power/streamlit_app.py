@@ -52,7 +52,7 @@ os.makedirs(OUTPUT_DIR, exist_ok=True)
 
 
 POWER_SOURCE_TAGS = [
-    "ROLE", "RESOURCE", "GATEKEEP", "STATUS", "INFO/EXPERTISE", "TIME/URGENCY",
+    "ROLE", "RESOURCE/ACCESS", "STATUS/SOCIAL PRESTIGE", "INFO/EXPERTISE", "TIME/URGENCY",
     "NORM/REPUTATION", "EMOTIONAL LEVERAGE", "COERCION", "COALITION"
 ]
 
@@ -384,26 +384,18 @@ with st.sidebar.expander("📘 Quick Reference", expanded=False):
   - *Control* = actually steering what happens / what the other accepts.
   - *Threat* (esp. weak/empty threats) ≠ automatically control unless it changes the outcome.
 
----
-**Evidence**:
-- Controls outcomes (what/whether/when/how)
-- Issues directives and gets compliance
-- Gatekeeps access/resources
-- Enforces norms/reputation
-- Leverages expertise/information
-
+                
 **Resource Tags**:
 - ROLE: Power comes from a recognized role hierarchy that legitimizes directing or evaluating the other.
-- RESOURCE: Power comes from controlling money, goods, access to items, or practical support.
-- GATEKEEP: Power comes from controlling whether the other can access something (an event, opportunity, information, approval, membership, decision channel).
-- STATUS: Power comes from social rank, popularity, reputation, or being admired/feared (even without formal authority).
-- INFO/EXPERTISE: Power comes from having specialized knowledge, credentials, or information the other lacks, which shapes decisions.
-- TIME/URGENCY: Power comes from imposing urgency, deadlines, or controlling when action must happen.
-- NORM/REPUTATION: Power comes from enforcing “what is proper/acceptable,” invoking duty, etiquette, family values, or “how people should behave.”
+- RESOURCE/ACCESS: Power comes from controlling money, goods, access to items, or practical support.
+- STATUS/SOCIAL PRESTIGE: Power comes from controlling resources, practical support, access, approval, opportunities, participation, or channels the other person needs or depends on.
+- INFO/EXPERTISE: Power comes from having relevant expertise, credentials, know-how, or privileged information the other person lacks, which shapes decisions, interpretations, or actions.
+- TIME/URGENCY: Power comes from imposing urgency, deadlines, or controlling when action must happen in a way that constrains the other person’s options.
+- NORM/REPUTATION: Power comes from invoking what is proper, acceptable, respectful, shameful, or expected — including etiquette, duty, family values, or concern about how others will judge the situation.
 - EMOTIONAL LEVERAGE: Power comes from manipulating emotions (guilt, fear of disappointing, affection withdrawal, emotional dependency) to influence the other. Tag it when a speaker uses **emotionally loaded pressure** to influence the other’s stance/outcome,
 especially via **negative emotional framing** (e.g., guilt/shame/disappointment/fear of letting someone down),
 even if not explicit crying/pleading.
-- COERCION: Power comes from explicit or implicit threats, punishment, or consequences imposed by the speaker.
+- COERCION: Power comes from explicit or implicit threats, punishment, or consequences imposed by the speaker. If the speaker is only making the other person feel bad emotionally, without threatening a concrete consequence → consider EMOTIONAL LEVERAGE.
 - COALITION: Power comes from aligning with others (family, friends, rules, institutions) to increase pressure or legitimacy.                                
 
 """)
