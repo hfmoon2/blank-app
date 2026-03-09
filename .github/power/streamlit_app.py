@@ -94,7 +94,6 @@ def load_cases(path: str, mtime: float):
             cases.append(c)
     return cases
 
-@st.cache_data
 def load_tutorial(path: str) -> list:
     if not os.path.exists(path):
         return []
@@ -103,7 +102,6 @@ def load_tutorial(path: str) -> list:
     if isinstance(obj, dict) and isinstance(obj.get("steps"), list):
         return obj["steps"]
     raise ValueError("tutorial.json must be a JSON object with a top-level 'steps' list.")
-
 
 def ensure_output_dir():
     os.makedirs(OUTPUT_DIR, exist_ok=True)
@@ -210,10 +208,29 @@ def render_tag_reference(step):
         for t in g.get("tags", []):
             with st.expander(t["tag"]):
                 st.markdown(f"**Definition:** {t.get('definition','')}")
+
                 cues = t.get("cues", [])
+                use_when = t.get("use_when", t.get("Use when", []))
+                dont_use_when = t.get("dont_use_when", t.get("Do not use when", []))
+
                 if cues:
                     st.markdown("**Common cues:**")
                     st.markdown("\n".join([f"- {c}" for c in cues]))
+
+                if use_when:
+                    st.markdown("**Use when:**")
+                    if isinstance(use_when, str):
+                        st.markdown(f"- {use_when}")
+                    else:
+                        st.markdown("\n".join([f"- {x}" for x in use_when]))
+
+                if dont_use_when:
+                    st.markdown("**Do not use when:**")
+                    if isinstance(dont_use_when, str):
+                        st.markdown(f"- {dont_use_when}")
+                    else:
+                        st.markdown("\n".join([f"- {x}" for x in dont_use_when]))
+
                 ex = t.get("mini_example")
                 if ex:
                     st.markdown(f"**Mini example:** {ex}")
@@ -243,71 +260,28 @@ def render_content(step):
         st.info(step["callout"])
 
 def render_walkthrough(step):
-    st.header(step.get("title","Walkthrough"))
-    st.write(step.get("prompt",""))
-    render_conversation(step.get("conversation", []))
+    st.header(step.get("title", "Walkthrough"))
+    if step.get("prompt"):
+        st.write(step.get("prompt", ""))
+
+    conv = step.get("conversation", [])
+    if conv:
+        render_conversation(conv)
 
     gold = step.get("gold", {})
-    st.subheader("Suggested answer")
-    st.markdown(f"- **Winner:** {gold.get('winner','')}")
-    st.markdown(f"- **Tags:** {', '.join(gold.get('tags', [])) or '(none)'}")
-    if step.get("rationale"):
-        st.markdown(f"**Why:** {step['rationale']}")
+    rationale = step.get("rationale")
 
-def render_practice(step, all_tags):
-    st.header(step.get("title","Practice"))
-    st.write(step.get("prompt",""))
-    render_conversation(step.get("conversation", []))
+    if gold and (gold.get("winner") or gold.get("tags")):
+        st.subheader("Suggested answer")
+        st.markdown(f"- **Winner:** {gold.get('winner','')}")
+        st.markdown(f"- **Tags:** {', '.join(gold.get('tags', [])) or '(none)'}")
 
-    sid = step.get("id", "practice")
-    form_key = f"practice_form_{sid}"
-
-    with st.form(key=form_key):
-        winner = st.radio(
-            "Winner",
-            options=["A", "B", "Tie"],
-            horizontal=True,
-            key=f"practice_winner_{sid}",
-        )
-        tags = st.multiselect(
-            "Power source tags (multi-select)",
-            options=all_tags,
-            key=f"practice_tags_{sid}",
-        )
-        submitted = st.form_submit_button("Check answer")
-
-    if submitted:
-        gold = step.get("gold", {})
-        gold_winner = gold.get("winner", "")
-        gold_tags = set(gold.get("tags", []))
-
-        # Map A/B labels to actual gold if gold uses speakers (A/B/Name)
-        user_winner = winner
-        # If gold is "Tie" keep as-is; else allow both formats
-        if gold_winner in ["A", "B", "Tie"]:
-            correct_winner = gold_winner
+    if rationale:
+        if isinstance(rationale, list):
+            st.markdown("**Why:**")
+            st.markdown("\n".join([f"- {r}" for r in rationale]))
         else:
-            # If gold uses a speaker name (e.g., "PopularKid"), treat A/B as unknown here
-            correct_winner = gold_winner
-
-        st.subheader("Feedback")
-        st.markdown(f"**Suggested winner:** {gold_winner}")
-        st.markdown(f"**Suggested tags:** {', '.join(gold_tags) or '(none)'}")
-        if step.get("rationale"):
-            st.markdown(f"**Why:** {step['rationale']}")
-
-        # lightweight correctness signal (only if gold uses A/B/Tie)
-        if correct_winner in ["A", "B", "Tie"]:
-            if user_winner == correct_winner:
-                st.success("Winner matches the suggested answer.")
-            else:
-                st.warning("Winner differs from the suggested answer.")
-
-        user_tags = set(tags)
-        if user_tags == gold_tags:
-            st.success("Tags match the suggested answer.")
-        else:
-            st.info("Tags do not exactly match (that can be OK). Use the rationale to align your reasoning.")
+            st.markdown(f"**Why:** {rationale}")
 
 def render_tag_checkboxes(title, tags, default_selected, key_prefix, n_cols=1):
     st.markdown(f"**{title}**")
@@ -539,10 +513,6 @@ if st.session_state.mode == "Tutorial":
 
     elif t == "walkthrough":
         render_walkthrough(item)
-
-    elif t == "practice":
-        all_tags = POWER_SOURCE_TAGS
-        render_practice(item, all_tags)
 
     else:
         st.warning(f"Unknown tutorial step type: {t}")

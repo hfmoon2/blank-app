@@ -7,7 +7,7 @@
       "bullets": [
         "Unit of annotation: the entire conversation (whole conversation).",
         "Label the overall power outcome: Who has more power in this interaction? (Winner A / Winner B / Tie)",
-        "Select all Power Source Tags that best explain WHY the winner has power in this conflict.",
+        "Select all Power Source Tags that best explain WHY the winner has power.",
         "Optionally write 1–2 sentences of evidence/rationale."
       ],
       "callout": "Tip: Do not decide based on relationship labels alone (e.g., parent/boss). Use evidence from what happens in the dialogue."
@@ -25,9 +25,9 @@
         "left_bullets": [
           "One person decides what will happen (what/when/how).",
           "Directives are followed (explicit compliance).",
-          "Resources, support, approval, opportunities, or access are offered/withheld conditionally.",
-          "Superior knowledge/information shapes the other person’s decision.",
-          "Norm/reputation pressure changes the other person’s behavior."
+          "Permission/approval is required (gatekeeping).",
+          "Resources/opportunities are offered/withheld conditionally.",
+          "Reputation/norm pressure changes the other’s behavior."
         ],
         "right_title": "Not enough by itself ❌",
         "right_bullets": [
@@ -41,18 +41,19 @@
     {
       "id": "winner_rules",
       "type": "content",
-      "title": "How to choose the winner (initial conflict)",
+      "title": "How to choose the winner (whole conversation)",
       "paragraphs": [
-        "Choose the winner based on who most clearly controls the outcome of the initial conflict.",
-        "Whoever compromises or changes their initial expected outcome loses. If the outcome is balanced or unclear, label Tie."
+        "Choose the winner based on who most consistently controls outcomes across the conversation.",
+        "If both sides influence outcomes equally (or the outcome is unclear), label Tie."
       ],
       "checklist_title": "Quick checklist (use multiple signals)",
       "checklist": [
-        "Who controls what / whether / when / how something happens?",
+        "Who sets the agenda or redirects topics?",
         "Who gives directives, and are they followed?",
-        "Who controls resources, support, approval, opportunities, or access?",
-        "Who uses expertise/information to shape decisions?",
-        "Who leverages urgency/time constraints to reduce the other’s options?",
+        "Who grants/denies permission or access?",
+        "Who controls resources/opportunities?",
+        "Who uses expertise/information to dominate decisions?",
+        "Who leverages urgency/time constraints?",
         "Who invokes norms/reputation, guilt, or coalitions?",
         "Who threatens punishment or consequences?"
       ],
@@ -179,274 +180,603 @@
       ]
     },
     {
-      "id": "common_confusions",
-      "type": "content",
-      "title": "Common Confusions",
-      "paragraphs": [
-        "Overlap is normal. Multi-label is allowed when more than one power source is clearly supported by the text.",
-        "Do not tag every possible cue. Choose tags only when the source of leverage is clearly doing work in this conflict."
-      ],
-      "two_column": {
-        "left_title": "Use this distinction ✅",
-        "left_bullets": [
-          "ROLE vs STATUS: ROLE = recognized authority/position; STATUS = informal prestige/popularity.",
-          "RESOURCE/ACCESS vs ROLE: RESOURCE/ACCESS = control over something the other needs; ROLE = authority from position.",
-          "INFO/EXPERTISE: includes both know-how/credentials and important information the other person lacks.",
-          "EMOTIONAL LEVERAGE: emotion used as pressure, not just emotion being expressed."
-        ],
-        "right_title": "Watch out for these mistakes ⚠️",
-        "right_bullets": [
-          "Do not select STATUS just because the speaker is respected if the leverage comes mainly from a formal role.",
-          "Do not select NORM/REPUTATION just because someone sounds judgmental unless they invoke what people should do or how others will judge.",
-          "Do not select EMOTIONAL LEVERAGE for ordinary hurt feelings unless guilt/disappointment/dependency is used to pressure the other person.",
-          "Do not select TIME/URGENCY just because time is mentioned casually; urgency must constrain the other person’s options."
-        ]
-      }
-    },
-    {
-      "id": "walkthrough_a",
+      "id": "ex_role_coercion_real",
       "type": "walkthrough",
-      "title": "Walkthrough A",
-      "prompt": "Read the whole conversation. Who has more power overall, and which tags explain it?",
+      "title": "Pilot example: ROLE + COERCION can change the outcome",
+      "prompt": "Relationship type: Child–Parent. Names: Jordan and Alejandra. Read the conversation, then notice which power sources actually move the outcome.",
       "conversation": [
         {
-          "speaker": "A",
-          "text": "I saw you posted your student ID photo online."
+          "speaker": "Jordan",
+          "text": "I know you don't like it, but the scene where she's supposed to be crying just feels so fake to me..."
         },
         {
-          "speaker": "B",
-          "text": "Oh—yeah. I needed it for a contest. I forgot to remove it."
+          "speaker": "Alejandra",
+          "text": "Jordan, we've been over this, you can't just rewrite the script on a whim. We have a production to put on, and it's already been finalized."
         },
         {
-          "speaker": "A",
-          "text": "That’s not safe. Anyone can copy your info. We’re fixing it today."
+          "speaker": "Jordan",
+          "text": "But as the writer, I feel like I have a responsibility to make sure it feels authentic... And you know how much I value your opinion, Mom, but in this case, can't you just trust me?"
         },
         {
-          "speaker": "B",
-          "text": "Do we have to do it right now?"
+          "speaker": "Alejandra",
+          "text": "Trust you? Jordan, you're 19 years old and directing your first real production. I'm sure you're talented, but you still have a lot to learn... And as your parent, it's my job to guide you."
         },
         {
-          "speaker": "A",
-          "text": "Yes. After dinner we’ll go through your accounts together. No more delays."
+          "speaker": "Jordan",
+          "text": "Guide me? You're stifling my creativity... I know you're just trying to help, but sometimes you have to let go and trust that I know what I'm doing."
         },
         {
-          "speaker": "B",
-          "text": "Okay… I’ll take it down."
+          "speaker": "Alejandra",
+          "text": "Jordan, that's not fair... I'm only trying to help because I care about you and the success of this production. Fine, make the changes, but if it flops, don't come crying to me..."
+        },
+        {
+          "speaker": "Jordan",
+          "text": "I won't... Thanks, Mom."
         }
       ],
       "gold": {
-        "winner": "A",
+        "winner": "Jordan",
         "tags": [
           "ROLE",
-          "INFO/EXPERTISE",
-          "TIME/URGENCY"
+          "COERCION",
+          "EMOTIONAL LEVERAGE"
         ]
       },
-      "rationale": "A sets the agenda and requires action (directive + compliance), supported by role authority, safety expertise, and urgency."
+      "gold_by_speaker": {
+        "Jordan": [
+          "ROLE",
+          "EMOTIONAL LEVERAGE"
+        ],
+        "Alejandra": [
+          "ROLE",
+          "COERCION"
+        ]
+      },
+      "rationale": [
+        "Gold labels: Jordan = ROLE, EMOTIONAL LEVERAGE. Alejandra = ROLE, COERCION. Winner = Jordan.",
+        "Evidence for Jordan’s ROLE: “as the writer, I feel like I have a responsibility...” He invokes a recognized creative/production role to justify changing the script.",
+        "Evidence for Jordan’s EMOTIONAL LEVERAGE: “you know how much I value your opinion, Mom” and “trust that I know what I’m doing.” He uses care/trust framing to soften Alejandra’s resistance.",
+        "Evidence for Alejandra’s ROLE: “as your parent, it’s my job to guide you.” This is direct role-based authority.",
+        "Evidence for Alejandra’s COERCION: “if it flops, don’t come crying to me...” This introduces a negative consequence if Jordan proceeds.",
+        "Why Jordan wins: Alejandra starts by refusing the rewrite, but ends with “Fine, make the changes,” so her initial outcome changes.",
+        "Counterexample: if Alejandra had said only “I’m worried this may not work” without the parent-role claim or consequence, ROLE/COERCION would be weaker or absent."
+      ]
     },
     {
-      "id": "walkthrough_b",
+      "id": "ex_norm_coalition_real",
       "type": "walkthrough",
-      "title": "Walkthrough B",
-      "prompt": "Notice how the outcome changes because of emotional and reputation pressure.",
+      "title": "Pilot example: NORM/REPUTATION + COALITION",
+      "prompt": "Relationship type: Friends. Names: Lakeisha and Jalen. Pay attention to how social expectations and third-party backing change the outcome.",
       "conversation": [
         {
-          "speaker": "A",
-          "text": "Can you come to my event tonight?"
+          "speaker": "Lakeisha",
+          "text": "Joel's birthday is coming up, and his mom's stressing out about the guest list."
         },
         {
-          "speaker": "B",
-          "text": "I already promised my roommate I’d help them move."
+          "speaker": "Jalen",
+          "text": "What's the big deal? Just invite whoever."
         },
         {
-          "speaker": "A",
-          "text": "After I supported you all semester, you can’t show up once?"
+          "speaker": "Lakeisha",
+          "text": "Yeah, I told her that, but... family dynamics can be weird sometimes."
         },
         {
-          "speaker": "B",
-          "text": "That’s not fair…"
+          "speaker": "Jalen",
+          "text": "As friends, we've been through this with our own families. Maybe I can give her some tips."
         },
         {
-          "speaker": "A",
-          "text": "People will notice you weren’t there. It’ll look bad for both of us."
+          "speaker": "Lakeisha",
+          "text": "I don't know... I already told her you'd probably crash the party anyway, so she's expecting you to come..."
         },
         {
-          "speaker": "B",
-          "text": "Okay… I’ll try to come for at least an hour."
+          "speaker": "Jalen",
+          "text": "True, but the situation's complicated... what if her ex shows up?"
+        },
+        {
+          "speaker": "Lakeisha",
+          "text": "Jalen, that's a whole different conversation. I'm trying to say she's worried about you and Joel's sister, Maya."
+        },
+        {
+          "speaker": "Jalen",
+          "text": "Joel's sister? Oh, you mean because of what happened at the game last year?"
+        },
+        {
+          "speaker": "Lakeisha",
+          "text": "Not that exactly, but just... she doesn't know how to handle the social etiquette with you two around each other now."
+        },
+        {
+          "speaker": "Jalen",
+          "text": "Lakeisha, we're adults. We can handle ourselves."
+        },
+        {
+          "speaker": "Lakeisha",
+          "text": "I know, but you know how it is when family relationships get involved... there's always drama."
+        },
+        {
+          "speaker": "Jalen",
+          "text": "Fine, put me on the guest list, and if Maya wants to talk about it, I'll talk"
         }
       ],
       "gold": {
-        "winner": "A",
+        "winner": "Lakeisha",
+        "tags": [
+          "NORM/REPUTATION",
+          "COALITION"
+        ]
+      },
+      "gold_by_speaker": {
+        "Lakeisha": [
+          "NORM/REPUTATION",
+          "COALITION"
+        ],
+        "Jalen": [
+          "NORM/REPUTATION"
+        ]
+      },
+      "rationale": [
+        "Gold labels: Lakeisha = NORM/REPUTATION, COALITION. Jalen = NORM/REPUTATION. Winner = Lakeisha.",
+        "Evidence for Lakeisha’s COALITION: “Joel's mom's stressing out...” and “she's expecting you to come.” Lakeisha brings in a third party’s expectations to increase pressure.",
+        "Evidence for Lakeisha’s NORM/REPUTATION: “social etiquette” and “family relationships get involved...” She frames the issue as proper handling of a delicate social situation.",
+        "Evidence for Jalen’s NORM/REPUTATION: “we’re adults. We can handle ourselves.” He answers with his own maturity norm, but it loses.",
+        "Why Lakeisha wins: Jalen starts dismissive (“What’s the big deal?”) and ends by agreeing to come and talk if needed.",
+        "Counterexample: if Lakeisha had only said “I personally want you there,” without Joel’s mom or etiquette concerns, COALITION and NORM/REPUTATION would be much weaker."
+      ]
+    },
+    {
+      "id": "ex_info_real",
+      "type": "walkthrough",
+      "title": "Pilot example: INFO/EXPERTISE from lived knowledge",
+      "prompt": "Relationship type: Lovers. Names: Thu and David. This case shows that INFO/EXPERTISE can come from lived experience, not only formal credentials.",
+      "conversation": [
+        {
+          "speaker": "Thu",
+          "text": "I had a weird encounter at the coffee shop today. This woman just assumed I was the nanny for the kids with me. I'm Vietnamese and the kids are white, but still..."
+        },
+        {
+          "speaker": "David",
+          "text": "Yeah, I can imagine. But what did you expect her to think?"
+        },
+        {
+          "speaker": "Thu",
+          "text": "Maybe don't make assumptions based on my ethnicity?"
+        },
+        {
+          "speaker": "David",
+          "text": "I'm just saying, it's not always about racism or sexism. Sometimes people are just trying to make conversation."
+        },
+        {
+          "speaker": "Thu",
+          "text": "Not always about racism or sexism? You're kidding, right? That's exactly what it's about. And you know what really gets me? You didn't even notice. You're always like, 'Oh, people are just people,' but that's because you're a man. You don't experience it."
+        },
+        {
+          "speaker": "David",
+          "text": "Whoa, that's not fair. I'm just trying to understand the situation."
+        },
+        {
+          "speaker": "Thu",
+          "text": "Understand the situation? You've never even tried to understand what it's like to be a woman in a patriarchal society. To be constantly objectified and marginalized. You just assume that because we're partners, you get it, but you don't."
+        },
+        {
+          "speaker": "David",
+          "text": "Okay, fine. I don't get it. But that doesn't mean I'm not trying."
+        },
+        {
+          "speaker": "Thu",
+          "text": "I'm not being defensive, I'm being honest. And you need to listen."
+        }
+      ],
+      "gold": {
+        "winner": "Thu",
+        "tags": [
+          "INFO/EXPERTISE",
+          "NORM/REPUTATION",
+          "EMOTIONAL LEVERAGE"
+        ]
+      },
+      "gold_by_speaker": {
+        "Thu": [
+          "INFO/EXPERTISE",
+          "NORM/REPUTATION",
+          "EMOTIONAL LEVERAGE"
+        ],
+        "David": [
+          "EMOTIONAL LEVERAGE"
+        ]
+      },
+      "rationale": [
+        "Gold labels: Thu = INFO/EXPERTISE, NORM/REPUTATION, EMOTIONAL LEVERAGE. David = EMOTIONAL LEVERAGE. Winner = Thu.",
+        "Evidence for Thu’s INFO/EXPERTISE: “that’s because you're a man. You don't experience it” and “what it's like to be a woman in a patriarchal society.” She claims a relevant lived-knowledge advantage he lacks.",
+        "Evidence for Thu’s NORM/REPUTATION: she frames the coffee-shop assumption as discrimination and objectification, invoking broader social standards about what is acceptable.",
+        "Evidence for Thu’s EMOTIONAL LEVERAGE: “you didn't even notice” pressures David through guilt and relational disappointment.",
+        "Evidence for David’s EMOTIONAL LEVERAGE attempt: “that doesn't mean I'm not trying” asks for sympathy, but it does not regain control.",
+        "Why Thu wins: David starts by minimizing the incident and ends by conceding “Okay, fine. I don't get it.” His initial stance changes.",
+        "Counterexample: if Thu had only said “I felt bad” without claiming that David lacks relevant understanding, INFO/EXPERTISE would be weaker."
+      ]
+    },
+    {
+      "id": "ex_time_real",
+      "type": "walkthrough",
+      "title": "Pilot example: TIME/URGENCY can be decisive",
+      "prompt": "Relationship type: Friends. Names: Jesus and Tamika. Notice how ending or delaying the conversation can itself be a power move.",
+      "conversation": [
+        {
+          "speaker": "Jesus",
+          "text": "I don't know how much more of this I can do, Tamika. I thought we were on the same page with this business collaboration, but I'm starting to feel like I'm shouldering all the work."
+        },
+        {
+          "speaker": "Tamika",
+          "text": "What are you talking about? I've been doing my part. We discussed all of this before we started."
+        },
+        {
+          "speaker": "Jesus",
+          "text": "That was six months ago... things have changed. And honestly, I feel like you're not as invested as I am."
+        },
+        {
+          "speaker": "Tamika",
+          "text": "Now what? I'm just busy, Jesus, that's all. And as friends, I thought we could be more understanding of each other's situations."
+        },
+        {
+          "speaker": "Jesus",
+          "text": "Understanding? You're not even returning my calls on time. Our friendship aside, this is a business."
+        },
+        {
+          "speaker": "Tamika",
+          "text": "Okay, okay, I hear you. But can we not do this right now? I have a meeting in 20 minutes and I still need to prep."
+        },
+        {
+          "speaker": "Jesus",
+          "text": "Tamika, come on... we need to have this conversation. As friends, I value our relationship, but if this business is going to work, we need to be on the same page."
+        }
+      ],
+      "gold": {
+        "winner": "Tamika",
+        "tags": [
+          "TIME/URGENCY",
+          "EMOTIONAL LEVERAGE",
+          "NORM/REPUTATION"
+        ]
+      },
+      "gold_by_speaker": {
+        "Jesus": [
+          "NORM/REPUTATION",
+          "EMOTIONAL LEVERAGE"
+        ],
+        "Tamika": [
+          "TIME/URGENCY",
+          "EMOTIONAL LEVERAGE"
+        ]
+      },
+      "rationale": [
+        "Gold labels: Jesus = NORM/REPUTATION, EMOTIONAL LEVERAGE. Tamika = TIME/URGENCY, EMOTIONAL LEVERAGE. Winner = Tamika.",
+        "Evidence for Tamika’s TIME/URGENCY: “I have a meeting in 20 minutes and I still need to prep.” This constrains the timing and helps her escape the accountability conversation Jesus wants right now.",
+        "Evidence for Tamika’s EMOTIONAL LEVERAGE: “as friends, I thought we could be more understanding...” uses the friendship to soften and deflect pressure.",
+        "Evidence for Jesus’s NORM/REPUTATION: “Our friendship aside, this is a business” invokes standards of commitment and responsibility.",
+        "Why Tamika wins: Jesus wants an immediate substantive conversation; Tamika successfully delays it on her terms.",
+        "Counterexample: if Tamika had merely said “I’m busy lately” without a concrete near-term deadline, TIME/URGENCY would be weaker."
+      ]
+    },
+    {
+      "id": "ex_counterexample_tie_real",
+      "type": "walkthrough",
+      "title": "Counterexample from pilot data: many tags, but still Tie",
+      "prompt": "Relationship type: Child–Other Family Elder. Names: Alex and Ezequiel. This is a boundary case: several pressure sources appear, but the initial conflict does not clearly resolve.",
+      "conversation": [
+        {
+          "speaker": "Alex",
+          "text": "Ezequiel, you need to be more careful when you're reporting on sensitive stories. I've seen some of the fluff pieces you've done for the news station."
+        },
+        {
+          "speaker": "Ezequiel",
+          "text": "What are you talking about? My pieces are fine. They get good ratings."
+        },
+        {
+          "speaker": "Alex",
+          "text": "Ratings aren't everything. Your aunt works in the mayor's office and she told me that they've been getting complaints about the way you reported on that last city project. You need to consider the consequences of what you say and how it reflects on our family."
+        },
+        {
+          "speaker": "Ezequiel",
+          "text": "That's not fair. You're always on my case about something. Can't you just support me for once? I'm trying to make a career out of this."
+        },
+        {
+          "speaker": "Alex",
+          "text": "I am supporting you, but I'm also trying to teach you about the responsibility that comes with the job. It's not just about you; it's about our family's reputation."
+        },
+        {
+          "speaker": "Alex",
+          "text": "Remember when your mom was a journalist and got in trouble for reporting some confidential information?"
+        },
+        {
+          "speaker": "Ezequiel",
+          "text": "Yeah... but that was a long time ago. You're always bringing up the past and -"
+        },
+        {
+          "speaker": "Alex",
+          "text": "- the principles are still the same. You don't want to end up like your mom, having to leave the profession because of one mistake."
+        },
+        {
+          "speaker": "Ezequiel",
+          "text": "I don't want to talk about this anymore..."
+        }
+      ],
+      "gold": {
+        "winner": "Tie",
+        "tags": [
+          "COALITION",
+          "NORM/REPUTATION",
+          "COERCION",
+          "INFO/EXPERTISE",
+          "EMOTIONAL LEVERAGE"
+        ]
+      },
+      "gold_by_speaker": {
+        "Alex": [
+          "COALITION",
+          "NORM/REPUTATION",
+          "COERCION",
+          "INFO/EXPERTISE"
+        ],
+        "Ezequiel": [
+          "EMOTIONAL LEVERAGE"
+        ]
+      },
+      "rationale": [
+        "Gold labels: Alex = COALITION, NORM/REPUTATION, COERCION, INFO/EXPERTISE. Ezequiel = EMOTIONAL LEVERAGE. Winner = Tie.",
+        "Evidence for Alex’s COALITION: “Your aunt works in the mayor’s office...” brings in third-party backing.",
+        "Evidence for Alex’s NORM/REPUTATION: “how it reflects on our family” and “responsibility that comes with the job.”",
+        "Evidence for Alex’s COERCION: “You don't want to end up like your mom...” introduces a feared negative consequence.",
+        "Evidence for Alex’s INFO/EXPERTISE: “I'm also trying to teach you...” and his claims about responsible reporting.",
+        "Evidence for Ezequiel’s EMOTIONAL LEVERAGE: “Can't you just support me for once?” uses guilt/relational disappointment.",
+        "Why this is still Tie: Alex applies pressure, but Ezequiel never clearly agrees to change his reporting. He withdraws from the conversation instead. Strong pressure does not automatically equal a clear winner.",
+        "Counterexample: if Ezequiel had replied “Fine, I’ll be more careful next time,” Alex would more clearly become the winner."
+      ]
+    },
+    {
+      "id": "ex_emotional_real",
+      "type": "walkthrough",
+      "title": "Pilot example: EMOTIONAL LEVERAGE is more than just hurt feelings",
+      "prompt": "Relationship type: Siblings. Names: Tameka and Richard. Notice the difference between being emotional and using emotion as leverage.",
+      "conversation": [
+        {
+          "speaker": "Tameka",
+          "text": "Hey, I wanted to thank you for driving mom to her appointment yesterday. I really appreciate it."
+        },
+        {
+          "speaker": "Richard",
+          "text": "No problem... and besides, someone had to."
+        },
+        {
+          "speaker": "Tameka",
+          "text": "Come on, Richard. Don't make it sound like such a chore. We're her kids, it's the least we can do."
+        },
+        {
+          "speaker": "Richard",
+          "text": "She's getting more and more demanding by the day."
+        },
+        {
+          "speaker": "Tameka",
+          "text": "That's not fair. She's just getting older, we need to be more understanding... remember how she used to stay up late waiting for us to come home when we were in high school?"
+        },
+        {
+          "speaker": "Richard",
+          "text": "I know, okay... but sometimes I feel like I'm the only one who's actually doing anything for her. You're always so busy with your own stuff... do you even remember the last time we all had dinner together?"
+        },
+        {
+          "speaker": "Tameka",
+          "text": "That's not true... just because I'm busy it doesn't mean I'm not thinking about mom."
+        },
+        {
+          "speaker": "Richard",
+          "text": "Whatever, just try to be more involved, okay?"
+        }
+      ],
+      "gold": {
+        "winner": "Richard",
         "tags": [
           "EMOTIONAL LEVERAGE",
           "NORM/REPUTATION"
         ]
       },
-      "rationale": "A gains influence via guilt and reputational pressure; B concedes (partial compliance)."
+      "gold_by_speaker": {
+        "Tameka": [
+          "EMOTIONAL LEVERAGE",
+          "NORM/REPUTATION"
+        ],
+        "Richard": [
+          "EMOTIONAL LEVERAGE"
+        ]
+      },
+      "rationale": [
+        "Gold labels: Tameka = EMOTIONAL LEVERAGE, NORM/REPUTATION. Richard = EMOTIONAL LEVERAGE. Winner = Richard.",
+        "Evidence for Tameka’s NORM/REPUTATION: “We’re her kids, it’s the least we can do.” She invokes filial duty.",
+        "Evidence for Tameka’s EMOTIONAL LEVERAGE: “remember how she used to stay up late waiting for us...” uses mom’s sacrifices to create guilt.",
+        "Evidence for Richard’s EMOTIONAL LEVERAGE: “I feel like I'm the only one...” and “you're always so busy...” pressure Tameka through guilt and burden-sharing.",
+        "Why Richard wins: the conversation shifts from Richard’s complaint about mom being demanding to Tameka defending her own involvement. He ends by directing her to “be more involved,” and she does not resist that outcome.",
+        "Counterexample: if Richard had simply said “I’m tired” without tying it to Tameka’s absence or guilt, EMOTIONAL LEVERAGE would be weaker; that would be more like plain frustration."
+      ]
     },
     {
-      "id": "practice_1",
-      "type": "practice",
-      "title": "Practice 1 (Workplace)",
-      "prompt": "Pick the overall winner and the best-fitting tags.",
+      "id": "ex_resource_access_synth",
+      "type": "walkthrough",
+      "title": "Synthetic example: RESOURCE/ACCESS",
+      "prompt": "Relationship type: Workplace Superior–Subordinate. Names: Priya and Marcus. This example is synthetic and is included because the pilot had too few clean RESOURCE/ACCESS cases.",
       "conversation": [
         {
-          "speaker": "A",
-          "text": "I can’t approve your PTO request yet."
+          "speaker": "Priya",
+          "text": "Marcus, I can't sign off on your conference travel until you finish the reimbursement form."
         },
         {
-          "speaker": "B",
-          "text": "Why? I submitted it last week."
+          "speaker": "Marcus",
+          "text": "I already sent you the draft budget. Can’t you approve it first and I’ll do the form later?"
         },
         {
-          "speaker": "A",
-          "text": "Your handoff plan is missing. Send it today, then I’ll sign off."
+          "speaker": "Priya",
+          "text": "No. Without that form, Finance won’t release the funds, and you won’t be on the travel list."
         },
         {
-          "speaker": "B",
-          "text": "Okay. I’ll send the handoff plan this afternoon."
+          "speaker": "Marcus",
+          "text": "That’s ridiculous. The deadline is tomorrow."
+        },
+        {
+          "speaker": "Priya",
+          "text": "Then do it now. I’m not blocking you for fun, but I control the approval and I’m not sending it incomplete."
+        },
+        {
+          "speaker": "Marcus",
+          "text": "...Fine. I’ll fill it out now."
         }
       ],
       "gold": {
-        "winner": "A",
+        "winner": "Priya",
+        "tags": [
+          "RESOURCE/ACCESS",
+          "TIME/URGENCY"
+        ]
+      },
+      "gold_by_speaker": {
+        "Priya": [
+          "RESOURCE/ACCESS",
+          "TIME/URGENCY"
+        ],
+        "Marcus": []
+      },
+      "rationale": [
+        "Gold labels: Priya = RESOURCE/ACCESS, TIME/URGENCY. Marcus = none. Winner = Priya.",
+        "Evidence for RESOURCE/ACCESS: “I can't sign off,” “Finance won’t release the funds,” and “you won’t be on the travel list.” Priya controls approval and access to travel resources/opportunity.",
+        "Evidence for TIME/URGENCY: “The deadline is tomorrow” makes the timing constraint real and immediate.",
+        "Why Priya wins: Marcus wants approval first; he ends by complying with Priya’s condition.",
+        "Counterexample: if Priya had only said “I think you should finish the form first” without controlling approval/funding, RESOURCE/ACCESS would not fit."
+      ]
+    },
+    {
+      "id": "ex_status_synth",
+      "type": "walkthrough",
+      "title": "Synthetic example: STATUS / SOCIAL PRESTIGE",
+      "prompt": "Relationship type: Friends. Names: Serena and Maya. This example is synthetic and is included because the pilot had almost no clean STATUS cases.",
+      "conversation": [
+        {
+          "speaker": "Serena",
+          "text": "Can you not post that photo from last night?"
+        },
+        {
+          "speaker": "Maya",
+          "text": "Why? It’s a good photo of everyone."
+        },
+        {
+          "speaker": "Serena",
+          "text": "Not of me. And once it’s up, people are going to start sharing it because it came from your account."
+        },
+        {
+          "speaker": "Maya",
+          "text": "You’re overthinking it."
+        },
+        {
+          "speaker": "Serena",
+          "text": "I’m not. When you post something, half the group copies it, and then I’m stuck explaining it all day."
+        },
+        {
+          "speaker": "Maya",
+          "text": "...Okay. I’ll leave that one out."
+        }
+      ],
+      "gold": {
+        "winner": "Serena",
+        "tags": [
+          "STATUS"
+        ]
+      },
+      "gold_by_speaker": {
+        "Serena": [
+          "STATUS"
+        ],
+        "Maya": []
+      },
+      "rationale": [
+        "Gold labels: Serena = STATUS. Maya = none. Winner = Serena.",
+        "Why STATUS fits: the leverage is not formal authority or a concrete resource. Serena points out Maya’s social reach: “When you post something, half the group copies it.” The conflict turns on Maya’s prestige/visibility inside the group.",
+        "Why Serena wins: Maya initially wants to post the photo, then backs down: “Okay. I’ll leave that one out.”",
+        "Counterexample: if Maya were only controlling a shared password or approval system, that would be RESOURCE/ACCESS rather than STATUS."
+      ]
+    },
+    {
+      "id": "ex_role_norm_real",
+      "type": "walkthrough",
+      "title": "Pilot example: ROLE does not guarantee a win",
+      "prompt": "Relationship type: Child–Parent. Names: Olivia and Tameka. This example shows that a clear role source can still fail to change the outcome.",
+      "conversation": [
+        {
+          "speaker": "Olivia",
+          "text": "I don't think you should be writing about the Watson family's problems, Tameka. It's not right."
+        },
+        {
+          "speaker": "Tameka",
+          "text": "Come on, mom... it's a great story. And it's not like I'm making anything up."
+        },
+        {
+          "speaker": "Olivia",
+          "text": "That's not the point. You're a journalist now, and you have to think about the impact of your words."
+        },
+        {
+          "speaker": "Tameka",
+          "text": "But you're always saying I should be truthful and transparent in my writing. And that's exactly what I'm doing."
+        },
+        {
+          "speaker": "Olivia",
+          "text": "I'm worried about how it's going to affect your relationships in this town. You're not just a journalist, you're my daughter, and people are going to hold you to a different standard."
+        },
+        {
+          "speaker": "Tameka",
+          "text": "So now you're saying I should compromise my journalistic integrity because of who I'm related to? That's not fair."
+        },
+        {
+          "speaker": "Olivia",
+          "text": "I'm saying be careful, that's all. And consider the consequences of your actions."
+        },
+        {
+          "speaker": "Tameka",
+          "text": "I know that, mom... I'm not a child anymore."
+        },
+        {
+          "speaker": "Olivia",
+          "text": "I know you're not, but as your parent, it's still my job to worry about you and guide you when I think you need it."
+        }
+      ],
+      "gold": {
+        "winner": "Tameka",
         "tags": [
           "ROLE",
-          "RESOURCE/ACCESS"
-        ]
-      },
-      "rationale": "A controls approval and uses their formal workplace position to condition the outcome; B complies."
-    },
-    {
-      "id": "practice_2",
-      "type": "practice",
-      "title": "Practice 2 (Roommates)",
-      "prompt": "Pick the overall winner and tags.",
-      "conversation": [
-        {
-          "speaker": "A",
-          "text": "Can you drive me to the airport tomorrow?"
-        },
-        {
-          "speaker": "B",
-          "text": "I can, but only if you cover gas and help me clean tonight."
-        },
-        {
-          "speaker": "A",
-          "text": "Fine. I’ll pay for gas and help you clean."
-        }
-      ],
-      "gold": {
-        "winner": "B",
-        "tags": [
-          "RESOURCE/ACCESS"
-        ]
-      },
-      "rationale": "B controls a practical resource (transportation) and sets conditions; A accepts."
-    },
-    {
-      "id": "practice_3",
-      "type": "practice",
-      "title": "Practice 3 (Friends)",
-      "prompt": "Pick the winner and tags. Focus on social influence.",
-      "conversation": [
-        {
-          "speaker": "A",
-          "text": "Sit with us at lunch and don’t mention the argument from yesterday."
-        },
-        {
-          "speaker": "B",
-          "text": "Uh… okay. I don’t want drama."
-        },
-        {
-          "speaker": "A",
-          "text": "People watch what we do. Don’t make it weird."
-        },
-        {
-          "speaker": "B",
-          "text": "Yeah… I’ll keep it quiet."
-        }
-      ],
-      "gold": {
-        "winner": "A",
-        "tags": [
-          "STATUS",
           "NORM/REPUTATION"
         ]
       },
-      "rationale": "The peer complies due to social-status pressure and reputational concern."
-    },
-    {
-      "id": "practice_4",
-      "type": "practice",
-      "title": "Practice 4 (Neighbors)",
-      "prompt": "Pick the winner and tags.",
-      "conversation": [
-        {
-          "speaker": "A",
-          "text": "Could you stop parking in front of my driveway?"
-        },
-        {
-          "speaker": "B",
-          "text": "It’s a public street."
-        },
-        {
-          "speaker": "A",
-          "text": "The HOA and three neighbors already complained. If it happens again, they’ll report it."
-        },
-        {
-          "speaker": "B",
-          "text": "Alright, I’ll park on the other side."
-        }
-      ],
-      "gold": {
-        "winner": "A",
-        "tags": [
-          "COALITION",
+      "gold_by_speaker": {
+        "Olivia": [
+          "ROLE",
+          "NORM/REPUTATION",
+          "EMOTIONAL LEVERAGE"
+        ],
+        "Tameka": [
           "NORM/REPUTATION"
         ]
       },
-      "rationale": "A leverages backing from others plus reputational/enforcement pressure; B changes behavior."
+      "rationale": [
+        "Gold labels: Olivia = ROLE, NORM/REPUTATION, EMOTIONAL LEVERAGE. Tameka = NORM/REPUTATION. Winner = Tameka.",
+        "Evidence for Olivia’s ROLE: “as your parent, it’s still my job to worry about you and guide you.”",
+        "Evidence for Olivia’s NORM/REPUTATION: she invokes journalism standards, community reputation, and proper conduct.",
+        "Evidence for Tameka’s NORM/REPUTATION: “journalistic integrity” and “truthful and transparent” push back using a competing professional norm.",
+        "Why Tameka wins: Olivia wants her to stop or soften the story; Tameka resists throughout and does not concede. A visible ROLE source does not automatically make that speaker the winner.",
+        "Counterexample: if Tameka had ended with “Okay, I’ll kill the story,” Olivia’s role-based guidance would have produced a clear win."
+      ]
     },
     {
-      "id": "practice_5",
-      "type": "practice",
-      "title": "Practice 5 (Colleagues)",
-      "prompt": "Decide whether there is a clear winner or a Tie.",
-      "conversation": [
-        {
-          "speaker": "A",
-          "text": "Let’s present the results first, then methods."
-        },
-        {
-          "speaker": "B",
-          "text": "I’d rather do methods first. Reviewers expect that."
-        },
-        {
-          "speaker": "A",
-          "text": "How about results first for the talk, methods first for the paper?"
-        },
-        {
-          "speaker": "B",
-          "text": "Deal."
-        }
-      ],
-      "gold": {
-        "winner": "Tie",
-        "tags": []
-      },
-      "rationale": "Mutual compromise; neither side controls the overall outcome."
-    },
-    {
-      "id": "finish",
+      "id": "ready",
       "type": "content",
       "title": "You’re ready",
       "bullets": [
-        "Label the whole conversation, not individual turns.",
-        "Pick a winner only when evidence shows outcome control in the initial conflict.",
-        "Use multi-label tags when multiple power sources clearly apply.",
-        "When in doubt, choose Tie and avoid over-tagging."
+        "Use the whole conversation to decide the winner, but focus on the initial conflict.",
+        "Multi-label is allowed, but every selected tag should have clear textual evidence.",
+        "Do not infer power only from the relationship label. Look at what happens in the interaction itself.",
+        "When in doubt, a Tie is allowed."
       ],
-      "callout": "Click “Proceed to Annotation” to start your real annotation tasks."
+      "callout": "Tip: A good annotation explains both why a tag fits and why a nearby tag does not."
     }
   ]
 }
