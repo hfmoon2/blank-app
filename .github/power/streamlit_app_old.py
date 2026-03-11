@@ -27,73 +27,20 @@ if not st.session_state.auth_ok:
 
 
 def make_case_id(c: dict, idx: int) -> str:
-    # Prefer stable IDs from the current dialogue-generator format.
+    # try scenario id + names + relationship
     meta = c.get("meta", {}) if isinstance(c.get("meta"), dict) else {}
-    scenario_id = (
-        meta.get("topic_id")
-        or (meta.get("scenario", {}) or {}).get("id")
-        if isinstance(meta.get("scenario"), dict)
-        else meta.get("topic_id")
-    )
-    scenario_index = meta.get("scenario_index")
+    scenario_id = (meta.get("scenario", {}) or {}).get("id") if isinstance(meta.get("scenario"), dict) else None
     rel = meta.get("relationship_type", "Unknown")
     n1 = meta.get("name1", "")
     n2 = meta.get("name2", "")
 
-    base = f"{scenario_id}|{scenario_index}|{rel}|{n1}|{n2}".strip()
-    if base and base not in {"None|None|Unknown||", "None|Unknown||"}:
+    base = f"{scenario_id}|{rel}|{n1}|{n2}".strip()
+    if base and base != "None|Unknown||":
         h = hashlib.md5(base.encode("utf-8")).hexdigest()[:10]
         return f"case_{h}"
 
     # fallback: stable-ish by index
     return f"idx_{idx}"
-
-
-def normalize_case(c: dict, idx: int) -> dict:
-    if not isinstance(c, dict):
-        c = {}
-
-    meta = c.get("meta")
-    if not isinstance(meta, dict):
-        meta = {}
-
-    participants = meta.get("participants")
-    if isinstance(participants, list) and len(participants) >= 2:
-        p1 = participants[0] if isinstance(participants[0], dict) else {}
-        p2 = participants[1] if isinstance(participants[1], dict) else {}
-        meta.setdefault("name1", p1.get("name", "Speaker 1"))
-        meta.setdefault("name2", p2.get("name", "Speaker 2"))
-        meta.setdefault("role1", p1.get("role"))
-        meta.setdefault("role2", p2.get("role"))
-
-    top_level_script = c.get("script", [])
-    raw = c.get("raw")
-
-    if isinstance(raw, str):
-        try:
-            raw = json.loads(raw)
-        except json.JSONDecodeError:
-            raw = {}
-    elif raw is None:
-        raw = {}
-    elif not isinstance(raw, dict):
-        raw = {}
-
-    if not isinstance(top_level_script, list):
-        top_level_script = []
-
-    script = raw.get("script", top_level_script)
-    if not isinstance(script, list):
-        script = top_level_script if isinstance(top_level_script, list) else []
-    raw["script"] = script
-
-    c["meta"] = meta
-    c["raw"] = raw
-
-    if not c.get("id"):
-        c["id"] = make_case_id(c, idx)
-
-    return c
 
 
 # Config
@@ -120,7 +67,31 @@ def load_cases(path: str, mtime: float):
             if not line:
                 continue
             c = json.loads(line)
-            cases.append(normalize_case(c, idx))
+
+            # normalize raw
+            raw = c.get("raw")
+            if isinstance(raw, str):
+                try:
+                    raw = json.loads(raw)
+                except json.JSONDecodeError:
+                    # raw is a string but not valid json
+                    raw = {"script": []}
+            elif raw is None:
+                raw = {"script": []}
+            elif not isinstance(raw, dict):
+                raw = {"script": []}
+
+            # ensure script
+            script = raw.get("script", [])
+            if not isinstance(script, list):
+                script = []
+            raw["script"] = script
+            c["raw"] = raw
+
+            if not c.get("id"): 
+                c["id"] = make_case_id(c, idx)
+
+            cases.append(c)
     return cases
 
 def load_tutorial(path: str) -> list:
@@ -719,3 +690,4 @@ else:
     # Small footer progress
     st.markdown("---")
     st.caption(f"Annotated: {done} / {total}")
+
